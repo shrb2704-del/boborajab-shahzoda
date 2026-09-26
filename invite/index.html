@@ -18,7 +18,7 @@
     --blush: #F6E8E3;
     --blush-2: #EFD9D2;
     --ink: #3B2328;
-    --muted: #836A6C;
+    --muted: #6E5558;
     --gold: #C9A267;
     --gold-soft: #E6CD9C;
     --script: "Great Vibes", "Segoe Script", cursive;
@@ -37,11 +37,13 @@
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
   }
-  body.locked { overflow: hidden; height: 100%; }
+  body.locked { position: fixed; inset: 0; overflow: hidden; width: 100%; }
+  ::selection { background: rgba(107, 22, 38, .18); }
   img { display: block; max-width: 100%; }
 
   /* ================= Конверт ================= */
   .env {
+    touch-action: none;
     position: fixed; inset: 0; z-index: 50; overflow: hidden;
     background: var(--wine-deep);
     perspective: 1600px;
@@ -49,8 +51,8 @@
   }
   .env.gone { opacity: 0; pointer-events: none; }
   .burst {
-    position: absolute; left: 50%; top: 50%; width: 140vmax; height: 140vmax;
-    margin: -70vmax 0 0 -70vmax; border-radius: 50%;
+    position: absolute; left: 50%; top: 50%; width: 100vmax; height: 100vmax;
+    margin: -50vmax 0 0 -50vmax; border-radius: 50%;
     background:
       radial-gradient(circle, #FFFBEA 0%, #FFE7A8 9%, rgba(255, 205, 120, .75) 20%, rgba(230, 160, 80, .35) 36%, rgba(120, 40, 30, 0) 60%);
     transform: scale(0); opacity: 0;
@@ -67,9 +69,12 @@
   .flap {
     position: absolute; inset: 0;
     background: url("img/envelope.webp") center / 100% 100% no-repeat, var(--wine);
-    transition: transform 1.7s cubic-bezier(.55,.02,.3,1), filter 1.7s ease;
-    backface-visibility: hidden;
+    transition: transform 1.7s cubic-bezier(.55,.02,.3,1);
+    -webkit-backface-visibility: hidden; backface-visibility: hidden;
   }
+  .flap::after { content: ""; position: absolute; inset: 0; background: #1A0508; opacity: 0; transition: opacity 1.7s ease; }
+  .env.opening .flap { will-change: transform; }
+  .env.opening .flap::after { opacity: .3; }
   .flap.bottom { transition-delay: .12s; }
   .flap.left, .flap.right { transition-delay: .22s; }
   .flap.top    { clip-path: polygon(0 0, 100% 0, 50% 50%); transform-origin: 50% 0; z-index: 4; }
@@ -90,13 +95,12 @@
   .seams {
     position: absolute; inset: 0; z-index: 5; width: 100%; height: 100%; pointer-events: none;
     opacity: 0; transition: opacity .6s ease;
-    filter: drop-shadow(0 0 4px #FFE2A0) drop-shadow(0 0 12px #FFC45E) drop-shadow(0 0 26px rgba(255, 170, 60, .8));
+    filter: drop-shadow(0 0 7px rgba(255, 196, 94, .95));
   }
   .core {
     position: absolute; left: 50%; top: 50%; z-index: 5; width: 80vmax; height: 80vmax;
     margin: -40vmax 0 0 -40vmax; border-radius: 50%; pointer-events: none;
     background: radial-gradient(circle, #FFFDF2 0%, #FFEBB5 10%, rgba(255, 205, 110, .75) 24%, rgba(255, 170, 70, .3) 42%, rgba(255, 150, 60, 0) 65%);
-    mix-blend-mode: screen;
     opacity: 0; transform: scale(0);
     transition: transform 1.8s cubic-bezier(.2,.7,.2,1), opacity .6s ease;
   }
@@ -121,6 +125,7 @@
   }
   .seal img { width: 100%; height: 100%; object-fit: contain; }
   .seal:focus-visible { outline: 2px solid var(--gold-soft); outline-offset: 6px; }
+  .hint small { display: block; margin-top: 4px; font-size: 12px; letter-spacing: .2em; opacity: .85; }
   .hint {
     font-size: 13px; letter-spacing: .34em; text-transform: uppercase; color: var(--gold-soft);
     text-shadow: 0 1px 6px rgba(0,0,0,.6);
@@ -133,14 +138,14 @@
   .env.glowing .core { opacity: .95; transform: scale(.32); }
   .env.glowing .seal { animation: none; filter: drop-shadow(0 0 18px rgba(255, 214, 140, .95)) drop-shadow(0 10px 18px rgba(0,0,0,.4)); }
   .env.opening .seal-box { opacity: 0; transform: translate(-50%, -70%) scale(.92); transition-duration: 1s, 1.2s; transition-delay: .35s; }
-  .env.opening .flap.top    { transform: rotateX(165deg); filter: brightness(.7); }
-  .env.opening .flap.bottom { transform: rotateX(-165deg); filter: brightness(.7); }
-  .env.opening .flap.left   { transform: rotateY(-165deg); filter: brightness(.7); }
-  .env.opening .flap.right  { transform: rotateY(165deg); filter: brightness(.7); }
+  .env.opening .flap.top    { transform: rotateX(165deg); }
+  .env.opening .flap.bottom { transform: rotateX(-165deg); }
+  .env.opening .flap.left   { transform: rotateY(-165deg); }
+  .env.opening .flap.right  { transform: rotateY(165deg); }
   .env.opening .lace { opacity: 0; transition-duration: .9s; }
   .env.opening .seams { opacity: 0; transition-duration: 1.2s; }
   .env.opening .core { transform: scale(1.9); opacity: 1; }
-  .env.opening .burst { transform: scale(1.5); opacity: 1; }
+  .env.opening .burst { transform: scale(1.9); opacity: 1; }
   .env.opening .rays { opacity: 1; transform: scale(1.25) rotate(35deg); }
 
   /* ================= Страница ================= */
@@ -154,8 +159,9 @@
   .hero > .paint {
     position: absolute; inset: 0; width: 100%; height: 100%;
     object-fit: cover; object-position: center 40%;
-    transform: scale(1.08); animation: settle 6s ease-out forwards;
+    transform: scale(1.08);
   }
+  body:not(.locked) .hero > .paint { animation: settle 6s cubic-bezier(.2,.7,.2,1) forwards; }
   @keyframes settle { to { transform: scale(1); } }
   .hero .text {
     position: absolute; left: 12%; right: 12%; top: 19%; bottom: 36%;
@@ -174,13 +180,12 @@
     font-size: clamp(58px, 17vw, 84px); line-height: .92; color: var(--wine);
     text-shadow: 0 2px 16px rgba(255, 246, 235, .9);
   }
-  .hero .names span { display: block; font-size: .5em; color: var(--gold); margin: 4px 0 2px; }
+  .hero .names span { display: block; font-size: .5em; color: var(--rose); margin: 4px 0 2px; }
   .hero .inv { font-style: italic; font-size: 19px; color: var(--ink); }
   .scroll-cue {
     position: absolute; left: 50%; bottom: 22px; z-index: 2; transform: translateX(-50%);
     width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center;
     background: rgba(255, 248, 238, .75); color: var(--wine);
-    animation: bob 2s ease-in-out infinite;
   }
   .scroll-cue svg { width: 18px; height: 18px; }
   @keyframes bob { 50% { transform: translate(-50%, 6px); } }
@@ -192,29 +197,29 @@
     padding: 44px 26px 56px;
   }
   .paper.alt { background: linear-gradient(rgba(246, 230, 224, .5), rgba(246, 230, 224, .5)), url("img/paper.webp") center / 420px, var(--blush-2); }
-  .paper + .paper {
-    margin-top: -20px; padding-top: 64px;
-    -webkit-mask: var(--torn) top / 100% 22px no-repeat, linear-gradient(#000 0 0) 0 21px / 100% calc(100% - 21px) no-repeat;
-            mask: var(--torn) top / 100% 22px no-repeat, linear-gradient(#000 0 0) 0 21px / 100% calc(100% - 21px) no-repeat;
+  .paper + .paper { padding-top: 64px; }
+  .paper + .paper::before {
+    content: ""; position: absolute; left: 0; right: 0; top: -21px; height: 22px; background: inherit; pointer-events: none;
+    -webkit-mask: var(--torn) top / 100% 100% no-repeat; mask: var(--torn) top / 100% 100% no-repeat;
   }
   .swans { width: calc(100% + 52px); max-width: none; margin: -44px -26px 6px; mix-blend-mode: multiply; }
   h2 {
-    margin: 0 0 18px; font-family: var(--script); font-weight: 400;
-    font-size: clamp(44px, 12vw, 56px); line-height: 1.05; color: var(--wine); text-wrap: balance;
+    margin: 0 0 18px; font-family: var(--serif); font-style: italic; font-weight: 500; letter-spacing: -.01em;
+    font-size: clamp(32px, 9vw, 40px); line-height: 1.15; color: var(--wine); text-wrap: balance;
   }
+  h2.script { font-family: var(--script); font-style: normal; font-weight: 400; font-size: clamp(44px, 12vw, 56px); letter-spacing: 0; }
   .couple { font-family: var(--script); font-size: clamp(40px, 11vw, 50px); color: var(--wine); line-height: 1.1; }
-  .sub { font-style: italic; font-size: 21px; color: var(--ink); margin-top: 2px; }
   p { margin: 0 auto; max-width: 32ch; }
   .lead { margin-top: 22px; font-size: 21px; line-height: 1.55; }
   .muted { color: var(--muted); }
   .flourish { width: 160px; height: 20px; margin: 26px auto 0; color: var(--gold); }
 
   /* Таймер */
-  .count { display: flex; justify-content: center; align-items: flex-start; gap: 6px; font-variant-numeric: tabular-nums; }
-  .count .u { display: grid; min-width: 62px; }
+  .count { display: flex; justify-content: center; align-items: flex-start; gap: clamp(2px, 1.2vw, 6px); font-variant-numeric: tabular-nums; }
+  .count .u { display: grid; min-width: 2.4ch; }
   .count b { font-weight: 500; font-size: clamp(44px, 12vw, 56px); line-height: 1; color: var(--wine); }
   .count small { font-size: 14px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
-  .count i { font-style: normal; font-size: clamp(38px, 10vw, 48px); line-height: 1; color: var(--gold); }
+  .count i { font-style: normal; font-size: clamp(38px, 10vw, 48px); line-height: 1; color: var(--rose); }
 
   /* Программа */
   .program { list-style: none; margin: 8px auto 0; padding: 0; max-width: 360px; position: relative; text-align: left; }
@@ -223,7 +228,7 @@
   .program time { font-size: 24px; font-weight: 500; color: var(--wine); font-variant-numeric: tabular-nums; text-align: right; }
   .program .pin { width: 11px; height: 11px; margin: 10px 0 0 7px; rotate: 45deg; background: var(--gold); position: relative; z-index: 1; box-shadow: 0 0 0 4px var(--blush); }
   .program strong { display: block; font-weight: 600; font-size: 20px; line-height: 1.25; }
-  .program span { display: block; font-style: italic; color: var(--muted); font-size: 17px; }
+  .program span { display: block; color: var(--muted); font-size: 18px; line-height: 1.35; }
 
   /* Место */
   .place-frame {
@@ -269,6 +274,7 @@
   /* Окно анкеты */
   .sheet-bg { position: fixed; inset: 0; z-index: 60; background: rgba(40, 10, 16, .45); display: grid; align-items: end; justify-items: center; }
   .sheet {
+    overscroll-behavior: contain;
     width: min(520px, 100%); max-height: 92svh; overflow: auto;
     background: linear-gradient(rgba(252, 246, 242, .7), rgba(252, 246, 242, .7)), url("img/paper.webp") center / 420px, var(--blush);
     border-radius: 22px 22px 0 0; padding: 22px 24px calc(28px + env(safe-area-inset-bottom, 0px));
@@ -276,6 +282,14 @@
     animation: up .45s cubic-bezier(.2,.8,.2,1);
   }
   @keyframes up { from { transform: translateY(100%); } }
+  .sheet-bg.closing { animation: fade-out .25s ease forwards; }
+  .sheet-bg.closing .sheet { animation: down .25s cubic-bezier(.4,0,1,1) forwards; }
+  @keyframes down { to { transform: translateY(100%); } }
+  @keyframes fade-out { to { background: rgba(40, 10, 16, 0); } }
+  .err { margin: 2px 0 0; max-width: none; font-size: 16px; color: #8E2A24; }
+  input[aria-invalid="true"] { border-color: #8E2A24; }
+  .link-btn { margin-top: 6px; padding: 6px 4px; border: 0; background: none; font: inherit; font-size: 17px; color: var(--muted); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+  .contact a { color: var(--wine); text-underline-offset: 4px; }
   .sheet header { display: flex; justify-content: space-between; align-items: center; }
   .sheet h3 { margin: 0; font-family: var(--script); font-weight: 400; font-size: 38px; color: var(--wine); }
   .close { width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(107, 22, 38, .25); background: transparent; color: var(--wine); font-size: 22px; cursor: pointer; }
@@ -295,7 +309,7 @@
 
   /* Появление */
   .reveal.pending { opacity: 0; transform: translateY(26px); }
-  .reveal { transition: opacity 1.1s ease, transform 1.1s cubic-bezier(.2,.7,.2,1); }
+  .reveal { transition: opacity 1.1s cubic-bezier(.2,.7,.2,1), transform 1.1s cubic-bezier(.2,.7,.2,1); }
 
   /* Музыка */
   .music {
@@ -337,7 +351,7 @@
     <button class="seal" id="seal" type="button" aria-label="Открыть приглашение">
       <img src="img/seal-blush.webp" alt="">
     </button>
-    <span class="hint">Нажмите на печать</span>
+    <span class="hint">Нажмите на печать<small>со звуком ♪</small></span>
   </div>
 </div>
 
@@ -347,7 +361,7 @@
 
   <!-- Картина с именами -->
   <section class="hero">
-    <video class="paint" id="hero-video" poster="img/hero-poster.webp" muted loop playsinline preload="auto" aria-label="Живописная каменная арка в розовом саду и пара лебедей на пруду">
+    <video class="paint" id="hero-video" poster="img/hero-poster.webp" muted loop playsinline preload="metadata" aria-label="Живописная каменная арка в розовом саду и пара лебедей на пруду">
       <source src="img/hero.mp4" type="video/mp4">
     </video>
     <div class="text">
@@ -365,9 +379,8 @@
   <section class="paper" id="invite">
     <img class="swans" src="img/swans.webp" alt="">
     <div class="reveal">
-      <div class="couple">Алексей &amp; Мария</div>
-      <div class="sub">с радостью приглашают вас</div>
-      <p class="lead">разделить с нами самый счастливый день нашей жизни. Для нас будет большой честью, если вы станете частью нашей истории любви.</p>
+      <h2>Дорогие родные и друзья!</h2>
+      <p class="lead">Этот день станет началом нашей семьи, и нам очень хочется, чтобы вы были рядом.</p>
       <svg class="flourish" viewBox="0 0 160 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width=".9"><path d="M2 10h56M102 10h56"/><path d="M80 3c-5 5-5 9 0 14 5-5 5-9 0-14z"/><path d="M60 10c6-6 12-6 14 0-2 6-8 6-14 0zM100 10c-6-6-12-6-14 0 2 6 8 6 14 0z"/></svg>
     </div>
   </section>
@@ -423,6 +436,7 @@
       <svg class="flourish" viewBox="0 0 160 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width=".9"><path d="M2 10h56M102 10h56"/><path d="M80 3c-5 5-5 9 0 14 5-5 5-9 0-14z"/><path d="M60 10c6-6 12-6 14 0-2 6-8 6-14 0zM100 10c-6-6-12-6-14 0 2 6 8 6 14 0z"/></svg>
       <h2 style="margin-top:22px">Пожелания</h2>
       <p>Самый ценный подарок для нас — ваше присутствие. Если хотите порадовать нас, будем благодарны за вклад в бюджет молодой семьи. Вместо цветов подарите бутылку любимого вина.</p>
+      <p class="contact muted" style="margin-top:14px">Вопросы о дороге и рассадке: организатор Анна, <a href="tel:+79001234567">+7&nbsp;900&nbsp;123-45-67</a></p>
     </div>
   </section>
 
@@ -435,8 +449,9 @@
         <img src="img/seal-wine.webp" alt=""><span>Ответить</span>
       </button>
       <div class="tap" id="tap">нажмите на печать</div>
-      <div class="answered" id="answered" hidden></div>
-      <h2 style="margin-top:34px">Будем ждать вас!</h2>
+      <div class="answered" id="answered" tabindex="-1" hidden></div>
+      <button class="link-btn" id="edit-answer" type="button" hidden>Изменить ответ</button>
+      <h2 class="script" style="margin-top:34px">Будем ждать вас!</h2>
       <div class="couple">Алексей &amp; Мария</div>
       <p class="draft">Черновик: имена, дата и место вымышленные, ответы анкеты пока никуда не отправляются.</p>
     </div>
@@ -448,13 +463,14 @@
 <div class="sheet-bg" id="sheet" hidden>
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
     <header>
-      <h3 id="sheet-title">Анкета гостя</h3>
+      <h3 id="sheet-title" tabindex="-1">Анкета гостя</h3>
       <button class="close" id="close-rsvp" type="button" aria-label="Закрыть">×</button>
     </header>
     <form id="rsvp-form" novalidate>
       <div class="field">
         <label for="guest-name">Имя и фамилия</label>
-        <input type="text" id="guest-name" autocomplete="name" placeholder="Как к вам обращаться">
+        <input type="text" id="guest-name" autocomplete="name" placeholder="Как к вам обращаться" aria-describedby="name-err">
+        <p class="err" id="name-err" role="alert" hidden>Напишите, пожалуйста, ваше имя, чтобы мы знали, кого ждать.</p>
       </div>
       <fieldset class="field">
         <legend>Вы придёте?</legend>
@@ -483,6 +499,7 @@
 
 <script>
 (() => {
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const el = id => document.getElementById(id);
 
@@ -497,24 +514,36 @@
     document.documentElement.style.setProperty('--torn', `url("data:image/svg+xml,${encodeURIComponent(svg)}")`);
   })();
 
-  /* ---------- Музыка: песня «Ordinary» ---------- */
+  /* ---------- Музыка: «Ordinary», громкость через Web Audio (на iPhone audio.volume не работает) ---------- */
   const Music = (() => {
     const audio = new Audio('music.mp3');
-    audio.loop = true; audio.preload = 'auto'; audio.volume = 0;
-    let fadeTimer;
-    const fadeTo = (target, ms) => {
-      clearInterval(fadeTimer);
-      const start = audio.volume, t0 = performance.now();
-      fadeTimer = setInterval(() => {
-        const k = Math.min(1, (performance.now() - t0) / ms);
-        audio.volume = start + (target - start) * k;
-        if (k === 1) { clearInterval(fadeTimer); if (target === 0) audio.pause(); }
-      }, 50);
-    };
+    audio.loop = true; audio.preload = 'none';
+    let ctx = null, gain = null;
+    function graph() {
+      if (ctx) return;
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      try {
+        ctx = new AC();
+        const src = ctx.createMediaElementSource(audio);
+        gain = ctx.createGain(); gain.gain.value = 0;
+        src.connect(gain); gain.connect(ctx.destination);
+      } catch (e) { ctx = null; gain = null; }
+    }
+    function ramp(v, sec) {
+      if (!gain) { audio.volume = v; return; }
+      const t = ctx.currentTime, g = gain.gain;
+      g.cancelScheduledValues(t); g.setValueAtTime(g.value, t); g.linearRampToValueAtTime(v, t + sec);
+    }
     return {
-      play() { audio.play().then(() => fadeTo(0.8, 1500)).catch(() => {}); this._on = true; },
-      pause() { fadeTo(0, 400); this._on = false; },
-      _on: false
+      _on: false,
+      play() {
+        graph();
+        if (ctx && ctx.state === 'suspended') ctx.resume();
+        this._on = true;
+        audio.play().then(() => ramp(.85, 1.8)).catch(() => { this._on = false; syncMusic(); });
+      },
+      pause() { this._on = false; ramp(0, .35); setTimeout(() => { if (!this._on) audio.pause(); }, 400); }
     };
   })();
   const musicBtn = el('music');
@@ -523,6 +552,15 @@
     musicBtn.setAttribute('aria-label', Music._on ? 'Выключить музыку' : 'Включить музыку');
   };
   musicBtn.addEventListener('click', () => { Music._on ? Music.pause() : Music.play(); syncMusic(); });
+
+  /* Видео с лебедями играет, только пока картина на экране */
+  const heroEl = document.querySelector('.hero');
+  let heroSeen = false;
+  new IntersectionObserver(es => {
+    const v = el('hero-video');
+    if (!heroSeen) return;
+    if (es[0].isIntersecting) v.play().catch(() => {}); else v.pause();
+  }).observe(heroEl);
 
   /* ---------- Появление при прокрутке ---------- */
   const reveals = [...document.querySelectorAll('.reveal')];
@@ -542,14 +580,17 @@
       return { x: cx, y: cy, vx: Math.cos(a) * v, vy: Math.sin(a) * v, r: .6 + Math.random() * 2, tw: Math.random() * 6 };
     });
     const t0 = performance.now();
+    let last = t0;
     (function f(now) {
-      const t = now - t0, fade = Math.max(0, 1 - t / 3200);
+      const t = now - t0, fade = Math.max(0, 1 - t / 3200), dt = Math.min(3, (now - last) / 16.7); last = now;
       c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, innerWidth, innerHeight);
-      ps.forEach(p => {
-        p.x += p.vx; p.y += p.vy; p.vx *= .985; p.vy = p.vy * .985 + .02; p.tw += .25;
+      c.fillStyle = '#FFE3A3';
+      for (let i = 0; i < ps.length; i++) {
+        const p = ps[i], k = Math.pow(.985, dt);
+        p.x += p.vx * dt; p.y += p.vy * dt; p.vx *= k; p.vy = p.vy * k + .02 * dt; p.tw += .25 * dt;
         c.globalAlpha = fade * (.55 + .45 * Math.sin(p.tw));
-        c.fillStyle = '#FFE3A3'; c.beginPath(); c.arc(p.x, p.y, p.r, 0, Math.PI * 2); c.fill();
-      });
+        c.beginPath(); c.arc(p.x, p.y, p.r, 0, 6.283); c.fill();
+      }
       if (fade > 0) requestAnimationFrame(f); else cv.remove();
     })(t0);
   }
@@ -563,6 +604,7 @@
     if (opened) return; opened = true;
     try { Music.play(); } catch (e) {}
     musicBtn.hidden = false; syncMusic();
+    heroSeen = true;
     try { video.play().catch(() => {}); } catch (e) {}
     env.classList.add('lace-on', 'glowing');                 // швы конверта светятся изнутри
     at(750, () => env.classList.add('opening'));             // клапаны раскрываются, бьёт свет
@@ -572,6 +614,7 @@
       if (io) reveals.forEach(r => { if (r.getBoundingClientRect().top > innerHeight * .9) { r.classList.add('pending'); io.observe(r); } });
       env.remove();
       document.body.classList.remove('locked');
+      window.scrollTo(0, 0);
       flash.classList.remove('on'); flash.classList.add('off'); // свет рассеивается, открывая картину
     });
     at(4700, () => flash.remove());
@@ -591,11 +634,31 @@
 
   /* ---------- Анкета ---------- */
   const sheet = el('sheet'), form = el('rsvp-form');
-  const openSheet = () => { sheet.hidden = false; document.body.style.overflow = 'hidden'; setTimeout(() => el('guest-name').focus(), 300); };
-  const closeSheet = () => { sheet.hidden = true; document.body.style.overflow = ''; el('open-rsvp').focus(); };
+  const page = document.querySelector('.page');
+  let scrollY0 = 0;
+  const openSheet = () => {
+    scrollY0 = scrollY;
+    sheet.classList.remove('closing'); sheet.hidden = false;
+    document.body.style.cssText = `position:fixed;left:0;right:0;top:${-scrollY0}px;overflow:hidden`;
+    page.inert = true; musicBtn.inert = true;
+    el('sheet-title').focus({ preventScroll: true });
+  };
+  const closeSheet = (focusBack = true) => {
+    if (sheet.hidden || sheet.classList.contains('closing')) return;
+    sheet.classList.add('closing');
+    setTimeout(() => {
+      sheet.hidden = true; sheet.classList.remove('closing');
+      document.body.style.cssText = ''; window.scrollTo(0, scrollY0);
+      page.inert = false; musicBtn.inert = false;
+      if (focusBack) el('open-rsvp').focus({ preventScroll: true });
+    }, reduce ? 0 : 250);
+  };
   el('open-rsvp').addEventListener('click', openSheet);
-  el('close-rsvp').addEventListener('click', closeSheet);
+  el('close-rsvp').addEventListener('click', () => closeSheet());
   sheet.addEventListener('click', e => { if (e.target === sheet) closeSheet(); });
+  const nameIn = el('guest-name'), nameErr = el('name-err');
+  nameIn.addEventListener('input', () => { if (nameIn.value.trim()) { nameErr.hidden = true; nameIn.removeAttribute('aria-invalid'); } });
+  el('edit-answer').addEventListener('click', () => { el('answered').hidden = true; el('edit-answer').hidden = true; el('tap').hidden = false; openSheet(); });
   addEventListener('keydown', e => { if (e.key === 'Escape' && !sheet.hidden) closeSheet(); });
   form.addEventListener('change', () => {
     el('guests-field').hidden = form.querySelector('input[name="attend"]:checked').value === 'no';
@@ -603,13 +666,14 @@
   form.addEventListener('submit', e => {
     e.preventDefault();
     const name = el('guest-name');
-    if (!name.value.trim()) { name.focus(); name.placeholder = 'Пожалуйста, укажите имя'; return; }
+    if (!name.value.trim()) { nameErr.hidden = false; name.setAttribute('aria-invalid', 'true'); name.focus(); return; }
     const first = name.value.trim().split(/\s+/)[0];
     const no = form.querySelector('input[name="attend"]:checked').value === 'no';
-    closeSheet();
-    el('tap').hidden = true;
+    closeSheet(false);
+    el('tap').hidden = true; el('edit-answer').hidden = false;
     const a = el('answered'); a.hidden = false;
     a.textContent = no ? `Жаль, ${first}, будем скучать` : `Спасибо, ${first}! Ждём вас`;
+    setTimeout(() => a.focus({ preventScroll: true }), 300);
   });
 })();
 </script>
