@@ -497,49 +497,32 @@
     document.documentElement.style.setProperty('--torn', `url("data:image/svg+xml,${encodeURIComponent(svg)}")`);
   })();
 
-  /* ---------- Музыкальная шкатулка ---------- */
+  /* ---------- Музыка: песня «Ordinary» ---------- */
   const Music = (() => {
-    let ctx, master, timer, next = 0, step = 0, playing = false;
-    const chords = [[62,66,69],[57,61,64],[59,62,66],[54,57,61],[55,59,62],[50,54,57],[55,59,62],[57,61,64]];
-    const pat = [0,1,2,3,2,1,2,1], beat = 0.32;
-    const hz = m => 440 * Math.pow(2, (m - 69) / 12);
-    function init() {
-      ctx = new (window.AudioContext || window.webkitAudioContext)();
-      master = ctx.createGain(); master.gain.value = 0.0001;
-      const dl = ctx.createDelay(); dl.delayTime.value = 0.34;
-      const fb = ctx.createGain(); fb.gain.value = 0.3;
-      master.connect(ctx.destination); master.connect(dl); dl.connect(fb); fb.connect(dl); dl.connect(ctx.destination);
-    }
-    function note(m, t, dur, vol) {
-      [[1, 1], [2, .16], [3, .05]].forEach(([k, v]) => {
-        const o = ctx.createOscillator(), g = ctx.createGain();
-        o.type = 'sine'; o.frequency.value = hz(m) * k;
-        g.gain.setValueAtTime(0.0001, t);
-        g.gain.exponentialRampToValueAtTime(vol * v, t + 0.008);
-        g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-        o.connect(g); g.connect(master); o.start(t); o.stop(t + dur + .05);
-      });
-    }
-    function tick() {
-      while (next < ctx.currentTime + 0.25) {
-        const c = chords[Math.floor(step / 8) % 8], i = pat[step % 8];
-        note((i === 3 ? c[0] + 12 : c[i]) + 12, next, 1.7, .2);
-        if (step % 8 === 0) note(c[0] - 12, next, 3.4, .2);
-        next += beat; step++;
-      }
-    }
+    const audio = new Audio('music.mp3');
+    audio.loop = true; audio.preload = 'auto'; audio.volume = 0;
+    let fadeTimer;
+    const fadeTo = (target, ms) => {
+      clearInterval(fadeTimer);
+      const start = audio.volume, t0 = performance.now();
+      fadeTimer = setInterval(() => {
+        const k = Math.min(1, (performance.now() - t0) / ms);
+        audio.volume = start + (target - start) * k;
+        if (k === 1) { clearInterval(fadeTimer); if (target === 0) audio.pause(); }
+      }, 50);
+    };
     return {
-      get playing() { return playing; },
-      play() { if (!ctx) init(); ctx.resume(); master.gain.cancelScheduledValues(ctx.currentTime); master.gain.setTargetAtTime(.5, ctx.currentTime, .5); next = ctx.currentTime + .05; clearInterval(timer); timer = setInterval(tick, 60); tick(); playing = true; },
-      pause() { if (!ctx) return; master.gain.setTargetAtTime(.0001, ctx.currentTime, .15); clearInterval(timer); playing = false; }
+      play() { audio.play().then(() => fadeTo(0.8, 1500)).catch(() => {}); this._on = true; },
+      pause() { fadeTo(0, 400); this._on = false; },
+      _on: false
     };
   })();
   const musicBtn = el('music');
   const syncMusic = () => {
-    el('ic-pause').hidden = !Music.playing; el('ic-play').hidden = Music.playing;
-    musicBtn.setAttribute('aria-label', Music.playing ? 'Выключить музыку' : 'Включить музыку');
+    el('ic-pause').hidden = !Music._on; el('ic-play').hidden = Music._on;
+    musicBtn.setAttribute('aria-label', Music._on ? 'Выключить музыку' : 'Включить музыку');
   };
-  musicBtn.addEventListener('click', () => { Music.playing ? Music.pause() : Music.play(); syncMusic(); });
+  musicBtn.addEventListener('click', () => { Music._on ? Music.pause() : Music.play(); syncMusic(); });
 
   /* ---------- Появление при прокрутке ---------- */
   const reveals = [...document.querySelectorAll('.reveal')];
