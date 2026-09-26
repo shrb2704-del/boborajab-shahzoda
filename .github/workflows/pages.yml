@@ -24,6 +24,8 @@ jobs:
       # Artwork, hero video and music live in Higgsfield storage, not in git.
       ASSETS_URL: https://d2ol7oe51mr4n9.cloudfront.net/user_328NQyffrDU9OqI498OIYuAFPgq/628f55c3-2323-4be2-817b-4f205b5dd50b.gz
       ASSETS_SHA256: 596f4435f4df54a89b9ad93f9c1a428778c7417e75f43cdf00395431de2798a1
+      ASSETS2_URL: https://d2ol7oe51mr4n9.cloudfront.net/user_328NQyffrDU9OqI498OIYuAFPgq/cceb47ff-d636-45f2-9466-dc3694e22328.gz
+      ASSETS2_SHA256: 202c9620ab70ef19ac810e2df043998fa6e8ba28f87455207127f1bd031bc594
     steps:
       - uses: actions/checkout@v4
 
@@ -32,12 +34,15 @@ jobs:
           curl -fsSL -o assets.tar.gz "$ASSETS_URL"
           echo "$ASSETS_SHA256  assets.tar.gz" | sha256sum -c -
           tar xzf assets.tar.gz -C invite
-          rm assets.tar.gz
+          curl -fsSL -o assets2.tar.gz "$ASSETS2_URL"
+          echo "$ASSETS2_SHA256  assets2.tar.gz" | sha256sum -c -
+          tar xzf assets2.tar.gz -C invite2
+          rm assets.tar.gz assets2.tar.gz
 
       - name: Assemble site
         run: |
           mkdir -p _site
-          cp -r index.html invite bordo shalfey _site/
+          cp -r index.html invite invite2 bordo shalfey _site/
           touch _site/.nojekyll
 
       - uses: actions/configure-pages@v5
