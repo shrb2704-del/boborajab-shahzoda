@@ -56,22 +56,17 @@
     animation: flicker 3.2s ease-in-out infinite; pointer-events: none;
   }
   @keyframes flicker { 0%,100% { opacity: .85; } 40% { opacity: 1; } 60% { opacity: .7; } 80% { opacity: .95; } }
-  .letter {                                   /* письмо за клапаном */
-    position: absolute; left: 7%; right: 7%; top: 6%; height: 48%;
-    background: linear-gradient(#FBF4EE, #F3E6DF); border-radius: 4px;
-    box-shadow: 0 -2px 30px rgba(255, 210, 150, .5);
-    transform: translateY(8%); opacity: 0;
-    transition: transform 1s cubic-bezier(.2,.7,.2,1) .5s, opacity .5s ease .45s;
-    display: grid; place-items: center;
+  .inner-light {                              /* свет изнутри конверта */
+    position: absolute; left: 50%; top: 0; width: 140%; height: 70%; transform: translateX(-50%);
+    background: radial-gradient(ellipse at 50% 0%, rgba(255, 236, 200, .95) 0%, rgba(255, 214, 160, .55) 30%, rgba(255, 200, 140, 0) 70%);
+    opacity: 0; transition: opacity 1.1s ease .25s; pointer-events: none;
   }
-  .letter span { font-family: var(--names); font-size: 44px; color: var(--copper); }
   .flap {
     position: absolute; left: 0; right: 0; top: 0; height: 50%; z-index: 2;
     background: url("img/envelope.webp") center top / 100% 200% no-repeat, #B9AFA6;
     clip-path: polygon(0 0, 100% 0, 50% 100%);
-    transform-origin: 50% 0; backface-visibility: hidden;
-    transition: transform 1.1s cubic-bezier(.55,.05,.3,1), filter 1.1s ease;
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,.12));
+    transform-origin: 50% 0;
+    transition: transform 1.1s cubic-bezier(.55,.05,.3,1), opacity .9s ease .15s;
   }
   .seal-box {
     position: absolute; z-index: 3; left: 50%; top: 50%; transform: translate(-50%, -50%);
@@ -92,12 +87,9 @@
   }
   .env.open .seal-box { opacity: 0; transform: translate(-50%, -70%) scale(.9); }
   .env.open .env-hint { opacity: 0; }
-  .env.open .flap { transform: rotateX(178deg); filter: brightness(.85); }
-  .env.open .letter { opacity: 1; transform: translateY(-4%); }
-  .env.gone .env-body { transform: translateY(108%); }
-  .env.gone .flap { transform: translateY(108%) rotateX(178deg); }
-  .env.gone .flap { transition: transform 1.15s cubic-bezier(.6,.02,.35,1); }
-  .env.gone .letter { transform: translateY(-140%); opacity: 0; transition: transform 1.1s cubic-bezier(.5,0,.3,1), opacity .9s ease .2s; }
+  .env.open .flap { transform: translateY(-38%) rotateX(55deg); opacity: 0; }
+  .env.open .inner-light { opacity: 1; }
+  .env.gone .env-body { transform: translateY(102%); }
 
   /* ================= Главный экран ================= */
   .page { max-width: 520px; margin: 0 auto; background: var(--paper); overflow: hidden; position: relative; }
@@ -247,7 +239,7 @@
 <div class="env" id="env">
  <div class="env-card">
   <div class="env-body" id="env-body">
-    <div class="letter" aria-hidden="true"><span>А &amp; М</span></div>
+    <div class="inner-light" aria-hidden="true"></div>
   </div>
   <div class="flap" aria-hidden="true"></div>
   <div class="seal-box">
