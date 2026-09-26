@@ -1,0 +1,52 @@
+name: Publish invitation to GitHub Pages
+
+on:
+  push:
+    branches: [claude/upbeat-johnson-gv3es5]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      # Artwork, hero video and music live in Higgsfield storage, not in git.
+      ASSETS_URL: https://d2ol7oe51mr4n9.cloudfront.net/user_328NQyffrDU9OqI498OIYuAFPgq/628f55c3-2323-4be2-817b-4f205b5dd50b.gz
+      ASSETS_SHA256: 596f4435f4df54a89b9ad93f9c1a428778c7417e75f43cdf00395431de2798a1
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch invitation assets
+        run: |
+          curl -fsSL -o assets.tar.gz "$ASSETS_URL"
+          echo "$ASSETS_SHA256  assets.tar.gz" | sha256sum -c -
+          tar xzf assets.tar.gz -C invite
+          rm assets.tar.gz
+
+      - name: Assemble site
+        run: |
+          mkdir -p _site
+          cp -r index.html invite bordo shalfey _site/
+          touch _site/.nojekyll
+
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
