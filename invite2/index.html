@@ -41,7 +41,8 @@
   img { display: block; max-width: 100%; }
 
   /* ================= Конверт ================= */
-  .env { position: fixed; inset: 0; z-index: 50; perspective: 1400px; pointer-events: auto; }
+  .env { position: fixed; inset: 0; z-index: 50; display: flex; justify-content: center; pointer-events: auto; }
+  .env-card { position: relative; width: min(100%, 520px); height: 100%; perspective: 1400px; overflow: hidden; }
   .env.gone { pointer-events: none; }
   .env-body {
     position: absolute; inset: 0;
@@ -93,7 +94,8 @@
   .env.open .env-hint { opacity: 0; }
   .env.open .flap { transform: rotateX(178deg); filter: brightness(.85); }
   .env.open .letter { opacity: 1; transform: translateY(-4%); }
-  .env.gone .env-body, .env.gone .flap { transform: translateY(108%); }
+  .env.gone .env-body { transform: translateY(108%); }
+  .env.gone .flap { transform: translateY(108%) rotateX(178deg); }
   .env.gone .flap { transition: transform 1.15s cubic-bezier(.6,.02,.35,1); }
   .env.gone .letter { transform: translateY(-140%); opacity: 0; transition: transform 1.1s cubic-bezier(.5,0,.3,1), opacity .9s ease .2s; }
 
@@ -135,8 +137,10 @@
   .kicker { font-family: var(--sans); font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: var(--muted); }
 
   /* Кнопка музыки с бегущим текстом */
+  .disc-wrap { position: relative; z-index: 5; height: 0; max-width: 520px; margin: 0 auto; }
   .disc {
-    position: relative; z-index: 3; width: 104px; height: 104px; margin: -104px auto 22px; padding: 0;
+    position: absolute; left: 50%; top: -74px; transform: translateX(-50%);
+    width: 104px; height: 104px; margin: 0; padding: 0;
     border: 0; background: none; cursor: pointer; display: grid; place-items: center; color: var(--ink);
   }
   .disc svg.ring { position: absolute; inset: 0; width: 100%; height: 100%; animation: spin 14s linear infinite; }
@@ -241,6 +245,7 @@
 
 <!-- ============ Конверт ============ -->
 <div class="env" id="env">
+ <div class="env-card">
   <div class="env-body" id="env-body">
     <div class="letter" aria-hidden="true"><span>А &amp; М</span></div>
   </div>
@@ -249,6 +254,7 @@
     <button class="seal" id="seal" type="button" aria-label="Открыть приглашение"><img src="img/seal.webp" alt=""></button>
   </div>
   <div class="env-hint">Нажмите, чтобы<br>открыть приглашение</div>
+ </div>
 </div>
 
 <main class="page">
@@ -264,8 +270,7 @@
     </div>
   </section>
 
-  <!-- Приветствие -->
-  <section class="paper torn">
+  <div class="disc-wrap">
     <button class="disc paused" id="disc" type="button" aria-label="Включить музыку">
       <svg class="ring" viewBox="0 0 104 104" aria-hidden="true">
         <defs><path id="circ" d="M52 52 m-40 0 a40 40 0 1 1 80 0 a40 40 0 1 1 -80 0"/></defs>
@@ -276,6 +281,10 @@
         <svg id="ic-pause" viewBox="0 0 24 24" fill="currentColor" hidden><rect x="6.5" y="5.5" width="3.6" height="13" rx="1"/><rect x="13.9" y="5.5" width="3.6" height="13" rx="1"/></svg>
       </span>
     </button>
+  </div>
+
+  <!-- Приветствие -->
+  <section class="paper torn" style="padding-top:92px">
     <div class="reveal">
       <h2>Дорогие гости!</h2>
       <p>В нашей жизни скоро случится очень важное событие, и мы будем счастливы разделить его с вами. Приглашаем вас на нашу свадьбу!</p>
