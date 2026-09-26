@@ -67,15 +67,17 @@
   .flap {
     position: absolute; inset: 0;
     background: url("img/envelope.webp") center / 100% 100% no-repeat, var(--wine);
-    transition: transform 1.3s cubic-bezier(.6,.02,.3,1), filter 1.3s ease;
+    transition: transform 1.7s cubic-bezier(.55,.02,.3,1), filter 1.7s ease;
     backface-visibility: hidden;
   }
+  .flap.bottom { transition-delay: .12s; }
+  .flap.left, .flap.right { transition-delay: .22s; }
   .flap.top    { clip-path: polygon(0 0, 100% 0, 50% 50%); transform-origin: 50% 0; z-index: 4; }
   .flap.bottom { clip-path: polygon(0 100%, 100% 100%, 50% 50%); transform-origin: 50% 100%; z-index: 3; }
   .flap.left   { clip-path: polygon(0 0, 50% 50%, 0 100%); transform-origin: 0 50%; z-index: 2; }
   .flap.right  { clip-path: polygon(100% 0, 50% 50%, 100% 100%); transform-origin: 100% 50%; z-index: 2; }
   .lace {
-    position: absolute; z-index: 5; width: min(46vw, 260px);
+    position: absolute; z-index: 6; width: min(46vw, 260px);
     opacity: 0; transform: scale(.85);
     transition: opacity 1s ease, transform 1.2s cubic-bezier(.2,.7,.2,1);
     filter: drop-shadow(0 2px 3px rgba(0,0,0,.4));
@@ -85,8 +87,28 @@
   .lace.tr { right: 0; top: 0; rotate: 90deg; }
   .lace.br { right: 0; bottom: 0; rotate: 180deg; }
   .lace.bl { left: 0; bottom: 0; rotate: 270deg; }
+  .seams {
+    position: absolute; inset: 0; z-index: 5; width: 100%; height: 100%; pointer-events: none;
+    opacity: 0; transition: opacity .6s ease;
+    filter: drop-shadow(0 0 4px #FFE2A0) drop-shadow(0 0 12px #FFC45E) drop-shadow(0 0 26px rgba(255, 170, 60, .8));
+  }
+  .core {
+    position: absolute; left: 50%; top: 50%; z-index: 5; width: 80vmax; height: 80vmax;
+    margin: -40vmax 0 0 -40vmax; border-radius: 50%; pointer-events: none;
+    background: radial-gradient(circle, #FFFDF2 0%, #FFEBB5 10%, rgba(255, 205, 110, .75) 24%, rgba(255, 170, 70, .3) 42%, rgba(255, 150, 60, 0) 65%);
+    mix-blend-mode: screen;
+    opacity: 0; transform: scale(0);
+    transition: transform 1.8s cubic-bezier(.2,.7,.2,1), opacity .6s ease;
+  }
+  .flash {
+    position: fixed; inset: 0; z-index: 58; pointer-events: none;
+    background: radial-gradient(circle at 50% 50%, #FFFDF4 0%, #FFF3D6 45%, #F9DDB4 100%);
+    opacity: 0; transition: opacity .75s ease;
+  }
+  .flash.on { opacity: 1; }
+  .flash.off { opacity: 0; transition: opacity 1.6s ease; }
   .seal-box {
-    position: absolute; z-index: 6; left: 50%; top: 50%;
+    position: absolute; z-index: 7; left: 50%; top: 50%;
     transform: translate(-50%, -50%);
     display: grid; justify-items: center; gap: 18px;
     transition: opacity .6s ease, transform .8s ease;
@@ -107,15 +129,19 @@
   @keyframes breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
   .env.lace-on .lace { opacity: 1; transform: none; }
-  .env.opening .seal-box { opacity: 0; transform: translate(-50%, -62%) scale(.9); }
-  .env.opening .seal { animation: none; }
-  .env.opening .flap.top    { transform: rotateX(172deg); filter: brightness(.6); }
-  .env.opening .flap.bottom { transform: rotateX(-172deg); filter: brightness(.6); }
-  .env.opening .flap.left   { transform: rotateY(-172deg); filter: brightness(.6); }
-  .env.opening .flap.right  { transform: rotateY(172deg); filter: brightness(.6); }
-  .env.opening .lace { opacity: 0; transition-duration: .6s; }
-  .env.opening .burst { transform: scale(1.4); opacity: 1; }
-  .env.opening .rays { opacity: .9; transform: scale(1.2) rotate(25deg); }
+  .env.glowing .seams { opacity: 1; }
+  .env.glowing .core { opacity: .95; transform: scale(.32); }
+  .env.glowing .seal { animation: none; filter: drop-shadow(0 0 18px rgba(255, 214, 140, .95)) drop-shadow(0 10px 18px rgba(0,0,0,.4)); }
+  .env.opening .seal-box { opacity: 0; transform: translate(-50%, -70%) scale(.92); transition-duration: 1s, 1.2s; transition-delay: .35s; }
+  .env.opening .flap.top    { transform: rotateX(165deg); filter: brightness(.7); }
+  .env.opening .flap.bottom { transform: rotateX(-165deg); filter: brightness(.7); }
+  .env.opening .flap.left   { transform: rotateY(-165deg); filter: brightness(.7); }
+  .env.opening .flap.right  { transform: rotateY(165deg); filter: brightness(.7); }
+  .env.opening .lace { opacity: 0; transition-duration: .9s; }
+  .env.opening .seams { opacity: 0; transition-duration: 1.2s; }
+  .env.opening .core { transform: scale(1.9); opacity: 1; }
+  .env.opening .burst { transform: scale(1.5); opacity: 1; }
+  .env.opening .rays { opacity: 1; transform: scale(1.25) rotate(35deg); }
 
   /* ================= Страница ================= */
   .page { max-width: 520px; margin: 0 auto; background: var(--blush); overflow: hidden; position: relative; }
@@ -125,7 +151,7 @@
     position: relative; height: 100svh; min-height: 620px; max-height: 1000px;
     overflow: hidden; background: #EADCCB;
   }
-  .hero > img.paint {
+  .hero > .paint {
     position: absolute; inset: 0; width: 100%; height: 100%;
     object-fit: cover; object-position: center 40%;
     transform: scale(1.08); animation: settle 6s ease-out forwards;
@@ -299,6 +325,10 @@
   <div class="flap right" aria-hidden="true"></div>
   <div class="flap bottom" aria-hidden="true"></div>
   <div class="flap top" aria-hidden="true"></div>
+  <svg class="seams" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 0 L50 50 L100 0 M0 100 L50 50 L100 100" fill="none" stroke="#FFEBB8" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
+  </svg>
+  <div class="core" aria-hidden="true"></div>
   <img class="lace tl" src="img/lace.webp" alt="">
   <img class="lace tr" src="img/lace.webp" alt="">
   <img class="lace br" src="img/lace.webp" alt="">
@@ -311,11 +341,15 @@
   </div>
 </div>
 
+<div class="flash" id="flash" aria-hidden="true"></div>
+
 <main class="page">
 
   <!-- Картина с именами -->
   <section class="hero">
-    <img class="paint" src="img/hero.webp" alt="Живописная каменная арка в розовом саду и пара лебедей на пруду">
+    <video class="paint" id="hero-video" poster="img/hero-poster.webp" muted loop playsinline preload="auto" aria-label="Живописная каменная арка в розовом саду и пара лебедей на пруду">
+      <source src="img/hero.mp4" type="video/mp4">
+    </video>
     <div class="text">
       <div class="kicker">День свадьбы</div>
       <div class="date">19 · 06 · 2027</div>
@@ -538,24 +572,26 @@
   }
 
   /* ---------- Открытие конверта ---------- */
-  const env = el('env');
+  const env = el('env'), flash = el('flash'), video = el('hero-video');
   setTimeout(() => env.classList.add('lace-on'), 600);
   let opened = false;
+  const at = (ms, fn) => setTimeout(fn, reduce ? 0 : ms);
   el('seal').addEventListener('click', () => {
     if (opened) return; opened = true;
     try { Music.play(); } catch (e) {}
     musicBtn.hidden = false; syncMusic();
-    env.classList.add('lace-on');
-    setTimeout(() => {
-      env.classList.add('opening');
-      if (!reduce) setTimeout(sparks, 350);
-    }, reduce ? 0 : 350);
-    setTimeout(() => {
+    try { video.play().catch(() => {}); } catch (e) {}
+    env.classList.add('lace-on', 'glowing');                 // швы конверта светятся изнутри
+    at(750, () => env.classList.add('opening'));             // клапаны раскрываются, бьёт свет
+    at(1050, () => { if (!reduce) sparks(); });
+    at(2150, () => flash.classList.add('on'));               // вспышка на весь экран
+    at(2950, () => {
       if (io) reveals.forEach(r => { if (r.getBoundingClientRect().top > innerHeight * .9) { r.classList.add('pending'); io.observe(r); } });
-      env.classList.add('gone');
+      env.remove();
       document.body.classList.remove('locked');
-    }, reduce ? 60 : 1900);
-    setTimeout(() => env.remove(), reduce ? 200 : 3100);
+      flash.classList.remove('on'); flash.classList.add('off'); // свет рассеивается, открывая картину
+    });
+    at(4700, () => flash.remove());
   });
 
   /* ---------- Таймер ---------- */
