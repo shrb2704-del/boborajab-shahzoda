@@ -338,10 +338,10 @@
     <h2 class="reveal">Барномаи рӯз</h2>
     <div class="timeline" id="timeline">
       <svg class="string" id="string" aria-hidden="true"></svg>
-      <div class="ev l"><div class="t">Пешвози меҳмонон</div><time>13:00</time><span>Ҷамъ омадан ва мусиқии зинда</span></div>
-      <div class="ev r"><div class="t">Маросими никоҳ</div><time>13:30</time><span>Лаҳзаи асосии рӯз</span></div>
-      <div class="ev l"><div class="t">Зиёфат</div><time>14:00</time><span>Дастархон, табрикҳо ва рақси аввал</span></div>
-      <div class="ev r"><div class="t">Шодиву хурсандӣ</div><time>16:00</time><span>Рақс, бозиҳо ва ҳазлу шӯхӣ</span></div>
+      <div class="ev l"><div class="t">Пешвози меҳмонон</div><time>15:00</time><span>Ҷамъ омадан ва мусиқии зинда</span></div>
+      <div class="ev r"><div class="t">Маросими никоҳ</div><time>15:30</time><span>Лаҳзаи асосии рӯз</span></div>
+      <div class="ev l"><div class="t">Зиёфат</div><time>16:00</time><span>Дастархон, табрикҳо ва рақси аввал</span></div>
+      <div class="ev r"><div class="t">Шодиву хурсандӣ</div><time>17:00</time><span>Рақс, бозиҳо ва ҳазлу шӯхӣ</span></div>
       <div class="ev l"><div class="t">Анҷоми ҷашн</div><time>18:00</time><span>Хайрбод ва аксҳо барои хотира</span></div>
     </div>
   </section>
@@ -571,7 +571,7 @@
   });
 
   /* ---------- Таймер ---------- */
-  const target = new Date('2026-10-16T13:00:00+05:00').getTime();   // Душанбе, UTC+5
+  const target = new Date('2026-10-16T15:00:00+05:00').getTime();   // Душанбе, UTC+5
   function tick() {
     const s = Math.max(0, Math.floor((target - Date.now()) / 1000));
     const d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60);
