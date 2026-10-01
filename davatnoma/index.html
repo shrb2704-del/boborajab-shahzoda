@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#1E1714">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;500&family=Great+Vibes&family=Lora:ital,wght@0,400;0,500;1,400&family=Bad+Script&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:ital,wght@0,300;0,500;0,600;1,500&family=Great+Vibes&display=swap">
 <link rel="preload" as="image" href="../invite2/img/envelope.webp">
 <link rel="preload" as="image" href="../invite2/img/seal.webp">
 <style>
@@ -24,9 +24,9 @@
     --copper-deep: #6F4128;
     --night: #1E1714;
     --names: "Great Vibes", "Segoe Script", cursive;
-    --hand: "Bad Script", "Lora", cursive;
-    --serif: "Lora", Georgia, serif;
-    --thin: "Cormorant Garamond", Georgia, serif;
+    --hand: "Cormorant Infant", Georgia, serif;
+    --serif: "Cormorant Infant", Georgia, serif;
+    --thin: "Cormorant Infant", Georgia, serif;
     --texture: url("../invite/img/paper.webp");
     --ease-out: cubic-bezier(.2, .7, .2, 1);
     color-scheme: light;
@@ -36,7 +36,7 @@
   html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
   body {
     margin: 0; background: var(--night); color: var(--ink);
-    font-family: var(--serif); font-size: 18px; line-height: 1.6;
+    font-family: var(--serif); font-weight: 500; font-size: 20px; line-height: 1.5; font-variant-numeric: lining-nums;
     -webkit-font-smoothing: antialiased;
   }
   body.locked { position: fixed; inset: 0; overflow: hidden; width: 100%; }
@@ -87,10 +87,10 @@
   @keyframes breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
   .env-hint {
     position: absolute; z-index: 3; left: 16px; right: 16px; bottom: calc(8% + env(safe-area-inset-bottom, 0px));
-    text-align: center; font-style: italic; font-size: 16px; line-height: 1.45; color: #4A413C;
+    text-align: center; font-style: italic; font-size: 18px; line-height: 1.45; color: #4A413C;
     transition: opacity .4s ease;
   }
-  .env-hint small { display: block; margin-top: 4px; font-size: 14px; font-style: normal; }
+  .env-hint small { display: block; margin-top: 4px; font-size: 16px; font-style: normal; }
   .env.open .seal-box { opacity: 0; transform: translate(-50%, -70%) scale(.9); }
   .env.open .env-hint { opacity: 0; }
   .env.open .flap { transform: translateY(-38%) rotateX(55deg); opacity: 0; will-change: transform, opacity; }
@@ -115,7 +115,7 @@
   .hero .names span { display: block; }
   .hero .names .amp { font-size: .55em; line-height: 1.1; color: var(--copper); }
   .hero .date { font-family: var(--thin); font-weight: 300; font-size: clamp(44px, 12vw, 58px); line-height: 1; letter-spacing: .02em; margin-top: 10px; font-variant-numeric: lining-nums; }
-  .hero .day { font-style: italic; font-size: 16px; color: #4A3B36; margin-top: 4px; }
+  .hero .day { font-style: italic; font-size: 18px; color: #4A3B36; margin-top: 4px; }
 
   /* ================= Бумага ================= */
   .paper {
@@ -133,7 +133,7 @@
   }
   .greet { padding-top: 84px; }
   h2 {
-    margin: 0 0 16px; font-family: var(--hand); font-weight: 400;
+    margin: 0 0 16px; font-family: var(--hand); font-style: italic; font-weight: 500; letter-spacing: -.01em;
     font-size: clamp(40px, 11vw, 50px); line-height: 1.1; color: var(--ink); text-wrap: balance;
   }
   p { margin: 0 auto; max-width: 32ch; text-wrap: pretty; }
@@ -168,18 +168,18 @@
 
   /* Календарь */
   .cal { max-width: 340px; margin: 6px auto 0; }
-  .cal .month { font-size: 17px; color: var(--muted); padding-bottom: 10px; border-bottom: 1px solid rgba(58, 48, 46, .25); }
+  .cal .month { font-size: 19px; color: var(--muted); padding-bottom: 10px; border-bottom: 1px solid rgba(58, 48, 46, .25); }
   .cal .days { display: grid; grid-template-columns: repeat(5, 1fr); }
   .cal .d { position: relative; padding: 12px 0 10px; border-right: 1px solid rgba(58, 48, 46, .2); }
   .cal .d:last-child { border-right: 0; }
-  .cal .d small { display: block; font-size: 14px; color: var(--muted); }
-  .cal .d b { font-family: var(--thin); font-weight: 500; font-size: 38px; line-height: 1.1; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .cal .d small { display: block; font-size: 16px; color: var(--muted); }
+  .cal .d b { font-family: var(--thin); font-weight: 500; font-size: 38px; line-height: 1.1; color: var(--ink); font-variant-numeric: lining-nums tabular-nums; }
   .cal .d.on b { color: var(--copper); }
   .cal .d svg { position: absolute; left: 50%; top: 50%; width: 92px; height: 104px; transform: translate(-50%, -48%); overflow: visible; }
   .cal .d svg path { fill: none; stroke: var(--ink); stroke-width: 1.3; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.6s var(--ease-out) .2s; }
   .cal.drawn .d svg path { stroke-dashoffset: 0; }
-  .countdown { margin-top: 22px; font-size: 16px; color: var(--muted); }
-  .countdown b { display: block; font-family: var(--thin); font-weight: 500; font-size: 26px; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .countdown { margin-top: 22px; font-size: 18px; color: var(--muted); }
+  .countdown b { display: block; font-family: var(--thin); font-weight: 500; font-size: 28px; color: var(--ink); font-variant-numeric: lining-nums tabular-nums; }
 
   /* Программа с ниточкой шарика */
   .timeline { position: relative; margin-top: 6px; padding: 96px 0 100px; }
@@ -193,18 +193,18 @@
   .timeline .ev { position: relative; display: grid; width: 64%; padding-block: 18px; }
   .timeline .ev.l { margin-right: auto; text-align: left; padding-left: 4px; }
   .timeline .ev.r { margin-left: auto; text-align: right; padding-right: 4px; }
-  .timeline .ev .t { font-family: var(--hand); font-size: 36px; line-height: 1.05; color: var(--ink); }
-  .timeline .ev time { font-family: var(--thin); font-size: 28px; font-weight: 500; line-height: 1.15; color: var(--ink); font-variant-numeric: tabular-nums; }
-  .timeline .ev span { font-size: 16px; color: var(--muted); line-height: 1.45; }
+  .timeline .ev .t { font-family: var(--hand); font-style: italic; font-weight: 500; font-size: 30px; line-height: 1.1; color: var(--ink); }
+  .timeline .ev time { font-family: var(--thin); font-size: 28px; font-weight: 500; line-height: 1.15; color: var(--ink); font-variant-numeric: lining-nums tabular-nums; }
+  .timeline .ev span { font-size: 18px; color: var(--muted); line-height: 1.45; }
 
   /* Место */
-  .venue-name { font-size: 20px; font-weight: 500; margin-top: 2px; }
+  .venue-name { font-size: 23px; font-weight: 600; margin-top: 2px; }
   .venue-addr { margin-top: 4px; }
   .round-btn {
     width: 124px; height: 124px; margin: 26px auto 0; border-radius: 50%;
     display: grid; place-items: center; text-align: center; padding: 16px;
     background: var(--copper); color: #F7F1EA; text-decoration: none;
-    font-size: 17px; line-height: 1.3;
+    font-size: 19px; line-height: 1.3;
     box-shadow: 0 10px 24px rgba(111, 65, 40, .26);
     transition: transform .3s var(--ease-out), background .3s ease;
     -webkit-tap-highlight-color: transparent;
@@ -227,22 +227,22 @@
   /* Анкета */
   form { display: grid; gap: 20px; max-width: 380px; margin: 26px auto 0; text-align: left; }
   .field { display: grid; gap: 6px; }
-  .field > label, .field > legend { font-size: 16px; color: var(--muted); padding: 0; }
+  .field > label, .field > legend { font-size: 18px; color: var(--muted); padding: 0; }
   fieldset { border: 0; margin: 0; padding: 0; }
   input[type="text"] {
-    width: 100%; font: inherit; font-size: 18px; color: var(--ink); background: transparent;
+    width: 100%; font: inherit; font-size: 20px; color: var(--ink); background: transparent;
     border: 0; border-bottom: 1px solid rgba(58, 48, 46, .4); border-radius: 0; padding: 6px 2px;
     caret-color: var(--copper);
   }
   ::placeholder { color: var(--muted); opacity: .85; }
   input:focus { outline: none; border-bottom-color: var(--ink); box-shadow: 0 1px 0 var(--ink); }
   input[aria-invalid="true"] { border-bottom-color: #9A3B2E; box-shadow: 0 1px 0 #9A3B2E; }
-  .err { margin: 2px 0 0; max-width: none; font-size: 15px; color: #8E3528; }
+  .err { margin: 2px 0 0; max-width: none; font-size: 17px; color: #8E3528; }
   .radio { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 5px 0; }
   .radio input { accent-color: var(--copper); width: 18px; height: 18px; margin: 0; }
   .pill {
     justify-self: center; margin-top: 6px; padding: 14px 36px; border: 0; border-radius: 999px; cursor: pointer;
-    background: var(--copper); color: #F7F1EA; font: inherit; font-size: 17px;
+    background: var(--copper); color: #F7F1EA; font: inherit; font-weight: 600; font-size: 19px;
     box-shadow: 0 8px 20px rgba(111, 65, 40, .24);
     transition: background .25s ease, transform .2s var(--ease-out);
   }
@@ -250,9 +250,9 @@
   .pill:active { transform: scale(.97); }
   .pill:focus-visible { outline: 2px solid var(--copper); outline-offset: 3px; }
   .thanks { margin-top: 26px; }
-  .thanks .big { font-family: var(--hand); font-size: 34px; line-height: 1.2; }
-  .link-btn { margin-top: 8px; padding: 6px 4px; border: 0; background: none; font: inherit; font-size: 16px; color: var(--muted); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
-  .pull { font-style: italic; font-size: clamp(22px, 6vw, 26px); line-height: 1.45; max-width: 22ch; color: var(--ink); }
+  .thanks .big { font-family: var(--hand); font-style: italic; font-size: 32px; line-height: 1.2; }
+  .link-btn { margin-top: 8px; padding: 6px 4px; border: 0; background: none; font: inherit; font-size: 18px; color: var(--muted); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+  .pull { font-style: italic; font-size: clamp(25px, 6.8vw, 29px); line-height: 1.45; max-width: 22ch; color: var(--ink); }
   .contact { margin-top: 18px; }
   .contact a { color: var(--ink); text-underline-offset: 4px; }
 
@@ -260,7 +260,7 @@
   .final .names2 { font-family: var(--names); font-size: clamp(44px, 12vw, 56px); line-height: 1.05; color: var(--copper); }
   .final .names2 span { display: block; }
   .final .names2 .amp { font-size: .55em; color: var(--ink); }
-  .draft { margin-top: 26px; font-size: 14px; font-style: italic; color: var(--muted); }
+  .draft { margin-top: 26px; font-size: 16px; font-style: italic; color: var(--muted); }
 
   /* Появление */
   .reveal.pending { opacity: 0; transform: translateY(20px); }
@@ -307,7 +307,7 @@
     <button class="disc paused" id="disc" type="button" aria-label="Мусиқиро фаъол кунед">
       <svg class="ring" viewBox="0 0 104 104" aria-hidden="true">
         <defs><path id="circ" d="M52 52 m-40 0 a40 40 0 1 1 80 0 a40 40 0 1 1 -80 0"/></defs>
-        <text font-family="Lora, Georgia, serif" font-size="9.4" letter-spacing="1.6" fill="currentColor"><textPath id="disc-text" href="#circ">СУРУДИ МО · ГӮШ КУНЕД · СУРУДИ МО · ГӮШ КУНЕД ·</textPath></text>
+        <text font-family="Cormorant Infant, Georgia, serif" font-weight="600" font-size="10.2" letter-spacing="1.6" fill="currentColor"><textPath id="disc-text" href="#circ">СУРУДИ МО · ГӮШ КУНЕД · СУРУДИ МО · ГӮШ КУНЕД ·</textPath></text>
       </svg>
       <span class="core">
         <svg class="ic-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
