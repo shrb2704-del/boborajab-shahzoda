@@ -18,13 +18,19 @@ jobs:
         env:
           URLS: ${{ inputs.urls }}
         run: |
+          pip install -q pillow
           mkdir out && cd out
           i=0
           for u in $URLS; do
             i=$((i+1))
             curl -fsSL -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" -m 60 -o "src_$i" "$u" || { echo "fail $u"; continue; }
-            convert "src_$i[0]" -resize '1400x1400>' -quality 86 "photo_$i.jpg" && convert "photo_$i.jpg" -resize 520x -quality 70 "thumb_$i.jpg"
-            identify "photo_$i.jpg"
+            python3 -c "
+          from PIL import Image
+          im = Image.open('src_$i').convert('RGB')
+          print('$i', im.size)
+          im.thumbnail((1600, 1600)); im.save('photo_$i.jpg', quality=88)
+          t = im.copy(); t.thumbnail((520, 520)); t.save('thumb_$i.jpg', quality=72)
+          " || continue
             echo "$i $u" >> sources.txt
             rm -f "src_$i"
           done
