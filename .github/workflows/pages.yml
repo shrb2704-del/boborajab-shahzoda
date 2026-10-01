@@ -42,7 +42,7 @@ jobs:
       - name: Assemble site
         run: |
           mkdir -p _site
-          cp -r index.html invite invite2 bordo shalfey _site/
+          cp -r index.html invite invite2 davatnoma bordo shalfey _site/
           touch _site/.nojekyll
 
       - uses: actions/configure-pages@v5
