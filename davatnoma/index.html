@@ -98,7 +98,8 @@
 
   /* ================= Главный экран ================= */
   .page { max-width: 520px; margin: 0 auto; background: var(--paper); overflow: hidden; position: relative; }
-  .hero { position: relative; height: 100svh; min-height: 620px; max-height: 1000px; background: var(--night); overflow: hidden; }
+  /* высота не меньше кадра 9:16 — пара всегда над облаками, имена на облаках */
+  .hero { position: relative; height: max(100svh, calc(min(100vw, 520px) * 16 / 9)); min-height: 620px; background: var(--night); overflow: hidden; }
   .hero .scene { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 35%; }
   .hero::after {                              /* мягкая бумажная дымка под именами */
     content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 1;
@@ -106,11 +107,13 @@
   }
   canvas.snow { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
   .hero .title {
-    position: absolute; z-index: 2; left: 16px; right: 16px; bottom: 15%;
+    position: absolute; z-index: 2; left: 16px; right: 16px; bottom: 11%;
     text-align: center; color: #3A2B27;
   }
-  .hero .names { margin: 0; font-family: var(--names); font-weight: 400; font-size: clamp(48px, 13.5vw, 66px); line-height: 1.05; }
-  .hero .date { font-family: var(--thin); font-weight: 300; font-size: clamp(56px, 16vw, 78px); line-height: 1; letter-spacing: .02em; margin-top: 2px; font-variant-numeric: lining-nums; }
+  .hero .names { margin: 0; font-family: var(--names); font-weight: 400; font-size: clamp(42px, 11.5vw, 56px); line-height: 1; }
+  .hero .names span { display: block; }
+  .hero .names .amp { font-size: .55em; line-height: 1.1; color: var(--copper); }
+  .hero .date { font-family: var(--thin); font-weight: 300; font-size: clamp(44px, 12vw, 58px); line-height: 1; letter-spacing: .02em; margin-top: 10px; font-variant-numeric: lining-nums; }
   .hero .day { font-style: italic; font-size: 16px; color: #4A3B36; margin-top: 4px; }
 
   /* ================= Бумага ================= */
@@ -248,7 +251,9 @@
   .contact a { color: var(--ink); text-underline-offset: 4px; }
 
   .final { padding-bottom: 88px; }
-  .final .names2 { font-family: var(--names); font-size: clamp(46px, 12.5vw, 58px); line-height: 1.1; color: var(--copper); }
+  .final .names2 { font-family: var(--names); font-size: clamp(44px, 12vw, 56px); line-height: 1.05; color: var(--copper); }
+  .final .names2 span { display: block; }
+  .final .names2 .amp { font-size: .55em; color: var(--ink); }
   .draft { margin-top: 26px; font-size: 14px; font-style: italic; color: var(--muted); }
 
   /* Появление */
@@ -286,7 +291,7 @@
     </video>
     <canvas class="snow" id="snow" aria-hidden="true"></canvas>
     <div class="title">
-      <h1 class="names">Бобораджаб &amp; Шахзода</h1>
+      <h1 class="names"><span>Бобораджаб</span><span class="amp">&amp;</span><span>Шахзода</span></h1>
       <div class="date">16/10</div>
       <div class="day">ҷумъа, 2026</div>
     </div>
@@ -409,7 +414,7 @@
   <section class="paper alt final">
     <div class="reveal">
       <h2>Шуморо интизорем!</h2>
-      <div class="names2">Бобораджаб &amp; Шахзода</div>
+      <div class="names2"><span>Бобораджаб</span><span class="amp">&amp;</span><span>Шахзода</span></div>
     </div>
   </section>
 </main>
