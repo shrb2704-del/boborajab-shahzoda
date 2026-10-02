@@ -6,6 +6,15 @@
 <title>Бобораҷаб ва Шахзода · 16/10</title>
 <meta name="description" content="Даъватнома ба тӯйи Бобораҷаб ва Шахзода, 16 октябри 2026">
 <meta name="theme-color" content="#1E1714">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Даъватнома">
+<meta property="og:title" content="Бобораҷаб ва Шахзода · 16 октябри 2026">
+<meta property="og:description" content="Шуморо ба ҷашни арӯсии мо даъват менамоем. Тарабхонаи «Фрегат», Душанбе, соати 15:30.">
+<meta property="og:url" content="https://shrb2704-del.github.io/boborajab-shahzoda/davatnoma/">
+<meta property="og:image" content="https://shrb2704-del.github.io/boborajab-shahzoda/davatnoma/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="img/icon.svg" type="image/svg+xml">
 <link rel="icon" href="img/icon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
@@ -254,6 +263,7 @@
   .pill:hover { background: var(--copper-deep); }
   .pill:active { transform: scale(.97); }
   .pill:focus-visible { outline: 2px solid var(--copper); outline-offset: 3px; }
+  .pill:disabled { opacity: .7; cursor: progress; transform: none; }
   .thanks { margin-top: 26px; }
   .thanks .big { font-family: var(--hand); font-style: italic; font-size: 32px; line-height: 1.2; }
   .link-btn { margin-top: 8px; padding: 6px 4px; border: 0; background: none; font: inherit; font-size: 18px; color: var(--muted); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
@@ -409,7 +419,8 @@
           <label class="radio"><input type="radio" id="att-yes" name="attend" value="yes" checked>Бо хурсандӣ меоям</label>
           <label class="radio"><input type="radio" id="att-no" name="attend" value="no">Мутаассифона, омада наметавонам</label>
         </fieldset>
-        <button class="pill" type="submit">Ҷавобро фиристед</button>
+        <button class="pill" type="submit" id="rsvp-send">Ҷавобро фиристед</button>
+        <p class="err" id="send-err" role="alert" hidden>Ҷавоб фиристода нашуд. Интернетро санҷед ва боз кӯшиш кунед.</p>
       </form>
       <div class="thanks" id="thanks" hidden>
         <div class="big" id="thanks-text" tabindex="-1"></div>
@@ -631,18 +642,46 @@
   buildString();
 
   /* ---------- Анкета ---------- */
+  /* Ответы приходят в Telegram. Бот создаётся в @BotFather; CHAT_ID — ваш личный id
+     (или id группы), куда бот будет писать. Пустые значения — отправка выключена. */
+  const TG_TOKEN = '';
+  const TG_CHAT_ID = '';
+
+  const send = (name, yes, changed) => {
+    if (!TG_TOKEN || !TG_CHAT_ID) return Promise.resolve();
+    const text = [
+      changed ? '✏️ Гость изменил ответ' : '💌 Новый ответ на приглашение',
+      `Имя: ${name}`,
+      yes ? 'Ответ: ✅ придёт' : 'Ответ: ❌ не сможет прийти'
+    ].join('\n');
+    const body = new URLSearchParams({ chat_id: TG_CHAT_ID, text });
+    // no-cors: простой POST без preflight; сеть упала — fetch отклонится, и гость увидит ошибку
+    return fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, { method: 'POST', body, mode: 'no-cors', keepalive: true });
+  };
+
   const form = el('rsvp-form'), nameIn = el('guest-name'), err = el('name-err');
+  const sendBtn = el('rsvp-send'), sendErr = el('send-err');
+  let answered = false;
   nameIn.addEventListener('input', () => { if (nameIn.value.trim()) { err.hidden = true; nameIn.removeAttribute('aria-invalid'); } });
   form.addEventListener('submit', e => {
     e.preventDefault();
     if (!nameIn.value.trim()) { err.hidden = false; nameIn.setAttribute('aria-invalid', 'true'); nameIn.focus(); return; }
     const first = nameIn.value.trim().split(/\s+/)[0];
     const no = form.querySelector('input[name="attend"]:checked').value === 'no';
+    sendBtn.disabled = true; sendErr.hidden = true;
+    send(nameIn.value.trim(), !no, answered).then(() => {
+      sendBtn.disabled = false; answered = true;
+      showThanks(first, no);
+    }, () => {
+      sendBtn.disabled = false; sendErr.hidden = false;
+    });
+  });
+  const showThanks = (first, no) => {
     form.hidden = true; el('thanks').hidden = false;
     const t = el('thanks-text');
     t.textContent = no ? `Афсӯс, ${first}, дилтанг мешавем!` : `Ташаккур, ${first}! Шуморо интизорем`;
     t.focus({ preventScroll: true });
-  });
+  };
   el('edit-answer').addEventListener('click', () => { el('thanks').hidden = true; form.hidden = false; nameIn.focus(); });
 })();
 </script>
