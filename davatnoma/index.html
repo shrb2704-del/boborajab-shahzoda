@@ -3,18 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Бобораджаб ва Шахзода · 16/10</title>
-<meta name="description" content="Даъватнома ба тӯйи Бобораджаб ва Шахзода, 16 октябри 2026">
+<title>Бобораҷаб ва Шахзода · 16/10</title>
+<meta name="description" content="Даъватнома ба тӯйи Бобораҷаб ва Шахзода, 16 октябри 2026">
 <meta name="theme-color" content="#1E1714">
 <link rel="icon" href="img/icon.svg" type="image/svg+xml">
 <link rel="icon" href="img/icon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:ital,wght@0,300;0,500;0,600;1,500&family=Great+Vibes&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:ital,wght@0,300;0,500;0,600;1,500&display=swap">
+<link rel="preload" as="font" type="font/woff2" href="fonts/great-vibes-tj.woff2" crossorigin>
 <link rel="preload" as="image" href="../invite2/img/envelope.webp">
 <link rel="preload" as="image" href="../invite2/img/seal.webp">
 <style>
+  @font-face { font-family: "Great Vibes TJ"; src: url("fonts/great-vibes-tj.woff2") format("woff2"); font-display: swap; }
   :root {
     --paper: #EFE4E1;
     --paper-2: #E8DAD6;
@@ -26,7 +28,7 @@
     --copper: #8C5535;         /* единственный акцент: печать, имена, кнопки; светлый текст на нём 5.4:1 */
     --copper-deep: #6F4128;
     --night: #1E1714;
-    --names: "Great Vibes", "Segoe Script", cursive;
+    --names: "Great Vibes TJ", "Segoe Script", cursive;
     --hand: "Cormorant Infant", Georgia, serif;
     --serif: "Cormorant Infant", Georgia, serif;
     --thin: "Cormorant Infant", Georgia, serif;
@@ -300,7 +302,7 @@
     </video>
     <canvas class="snow" id="snow" aria-hidden="true"></canvas>
     <div class="title">
-      <h1 class="names"><span>Бобораджаб</span><span class="amp">&amp;</span><span>Шахзода</span></h1>
+      <h1 class="names"><span>Бобораҷаб</span><span class="amp">&amp;</span><span>Шахзода</span></h1>
       <div class="date">16/10</div>
       <div class="day">ҷумъа, 2026</div>
     </div>
@@ -352,9 +354,9 @@
     <h2 class="reveal">Барномаи рӯз</h2>
     <div class="timeline" id="timeline">
       <svg class="string" id="string" aria-hidden="true"></svg>
-      <div class="ev l"><div class="t">Пешвози меҳмонон</div><time>15:00</time><span>Ҷамъ омадан ва мусиқии зинда</span></div>
-      <div class="ev r"><div class="t">Маросими никоҳ</div><time>15:30</time><span>Лаҳзаи асосии рӯз</span></div>
-      <div class="ev l"><div class="t">Банкет</div><time>16:00</time><span>Дастархон, табрикҳо ва рақси аввал</span></div>
+      <div class="ev l"><div class="t">Пешвози меҳмонон</div><time>15:30</time><span>Ҷамъ омадан ва мусиқии зинда</span></div>
+      <div class="ev r"><div class="t">Маросими никоҳ</div><time>16:00</time><span>Лаҳзаи асосии рӯз</span></div>
+      <div class="ev l"><div class="t">Банкет</div><time>16:30</time><span>Дастархон, табрикҳо ва рақси аввал</span></div>
       <div class="ev r"><div class="t">Шодиву хурсандӣ</div><time>17:00</time><span>Рақс, бозиҳо ва ҳазлу шӯхӣ</span></div>
       <div class="ev l"><div class="t">Анҷоми ҷашн</div><time>18:00</time><span>Хайрбод ва аксҳо барои хотира</span></div>
     </div>
@@ -419,7 +421,7 @@
   <section class="paper alt final">
     <div class="reveal">
       <h2>Шуморо интизорем!</h2>
-      <div class="names2"><span>Бобораджаб</span><span class="amp">&amp;</span><span>Шахзода</span></div>
+      <div class="names2"><span>Бобораҷаб</span><span class="amp">&amp;</span><span>Шахзода</span></div>
     </div>
   </section>
 </main>
@@ -581,7 +583,7 @@
   });
 
   /* ---------- Таймер ---------- */
-  const target = new Date('2026-10-16T15:00:00+05:00').getTime();   // Душанбе, UTC+5
+  const target = new Date('2026-10-16T15:30:00+05:00').getTime();   // Душанбе, UTC+5
   function tick() {
     const s = Math.max(0, Math.floor((target - Date.now()) / 1000));
     const d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60);
