@@ -26,6 +26,9 @@ jobs:
       ASSETS_SHA256: 596f4435f4df54a89b9ad93f9c1a428778c7417e75f43cdf00395431de2798a1
       ASSETS2_URL: https://d2ol7oe51mr4n9.cloudfront.net/user_328NQyffrDU9OqI498OIYuAFPgq/cceb47ff-d636-45f2-9466-dc3694e22328.gz
       ASSETS2_SHA256: 202c9620ab70ef19ac810e2df043998fa6e8ba28f87455207127f1bd031bc594
+      # Link-preview postcard (hero still + names), rendered from the same assets.
+      OG_URL: https://d2ol7oe51mr4n9.cloudfront.net/user_328NQyffrDU9OqI498OIYuAFPgq/b82aa55d-d17c-47ce-b522-18e73bb1822e.jpg
+      OG_SHA256: b627b5e2c75fbbddcdb56f18ed09f743c185aad01a36e583039c740965980067
     steps:
       - uses: actions/checkout@v4
 
@@ -38,6 +41,8 @@ jobs:
           echo "$ASSETS2_SHA256  assets2.tar.gz" | sha256sum -c -
           tar xzf assets2.tar.gz -C invite2
           rm assets.tar.gz assets2.tar.gz
+          curl -fsSL -o davatnoma/img/og-card.jpg "$OG_URL"
+          echo "$OG_SHA256  davatnoma/img/og-card.jpg" | sha256sum -c -
 
       - name: Assemble site
         run: |
