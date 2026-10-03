@@ -104,13 +104,6 @@
     text-align: center; font-style: italic; font-size: 18px; line-height: 1.45; color: #4A413C;
     transition: opacity .4s ease;
   }
-  .env-to {
-    position: absolute; z-index: 3; left: 16px; right: 16px; top: calc(11% + env(safe-area-inset-top, 0px));
-    text-align: center; color: #3A302E; transition: opacity .4s ease;
-  }
-  .env-to small { display: block; font-style: italic; font-size: 19px; color: #4A413C; }
-  .env-to b { display: block; font-family: var(--names); font-weight: 400; font-size: clamp(38px, 10.5vw, 50px); line-height: 1.15; }
-  .env.open .env-to { opacity: 0; }
   .env-hint small { display: block; margin-top: 4px; font-size: 16px; font-style: normal; }
   .env.open .seal-box { opacity: 0; transform: translate(-50%, -70%) scale(.9); }
   .env.open .env-hint { opacity: 0; }
@@ -307,7 +300,6 @@
   <div class="seal-box">
     <button class="seal" id="seal" type="button" aria-label="Taklifnomani oching"><img src="../invite2/img/seal.webp" alt=""></button>
   </div>
-  <div class="env-to"><small>Hurmatli</small><b>Azimxo’ja va Oydin</b></div>
   <div class="env-hint">Taklifnomani ochish uchun muhrga bosing<small>musiqa bilan</small></div>
  </div>
 </div>
