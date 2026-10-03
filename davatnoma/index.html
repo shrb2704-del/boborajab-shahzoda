@@ -132,13 +132,17 @@
   .hero .day { font-style: italic; font-size: 18px; color: #4A3B36; margin-top: 4px; }
 
   .scroll-hint {                              /* подсказка для тех, кто не знает, что дальше есть ещё */
-    position: absolute; z-index: 3; left: 0; right: 0; bottom: 44px; text-align: center; pointer-events: none;
-    font-style: italic; font-size: 17px; line-height: 1.2; color: #4A3B36;
-    opacity: 0; transform: translateY(6px); transition: opacity .6s ease, transform .6s ease;
+    position: absolute; z-index: 6; left: 50%; bottom: 46px; pointer-events: none;
+    display: flex; align-items: center; gap: 8px; white-space: nowrap;
+    padding: 9px 16px 9px 18px; border-radius: 999px;
+    background: var(--copper); color: #F7F1EA; box-shadow: 0 8px 20px rgba(60, 35, 20, .28);
+    font-weight: 600; font-size: 18px; line-height: 1;
+    opacity: 0; transform: translate(-50%, 10px); transition: opacity .5s ease, transform .5s ease;
   }
-  .scroll-hint.show { opacity: 1; transform: none; }
-  .scroll-hint svg { display: block; width: 20px; height: 20px; margin: 2px auto 0; animation: nudge 1.6s ease-in-out infinite; }
-  @keyframes nudge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+  .scroll-hint.float { position: fixed; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); }
+  .scroll-hint.show { opacity: 1; transform: translate(-50%, 0); animation: hop 1.8s ease-in-out .6s infinite; }
+  .scroll-hint svg { width: 18px; height: 18px; flex: none; }
+  @keyframes hop { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 6px); } }
 
   /* ================= Бумага ================= */
   .paper {
@@ -603,7 +607,12 @@
       document.body.classList.remove('locked');
       window.scrollTo(0, 0);
       if (heroVisible) Snow.start();
-      setTimeout(() => { if (scrollY < 40) hint.classList.add('show'); }, reduce ? 0 : 1300);
+      setTimeout(() => {
+        if (scrollY > 40) return;
+        // если низ сцены ушёл за экран (высокий экран, панели браузера) — подсказка прилипает к краю экрана
+        hint.classList.toggle('float', el('hero').getBoundingClientRect().bottom > innerHeight - 10);
+        hint.classList.add('show');
+      }, reduce ? 0 : 700);
     }, reduce ? 50 : 1900);
     setTimeout(() => env.remove(), reduce ? 200 : 3200);
   });
