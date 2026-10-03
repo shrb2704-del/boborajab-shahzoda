@@ -122,7 +122,7 @@
   }
   canvas.snow { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
   .hero .title {
-    position: absolute; z-index: 2; left: 16px; right: 16px; bottom: 11%;
+    position: absolute; z-index: 2; left: 16px; right: 16px; bottom: max(11%, 104px);
     text-align: center; color: #3A2B27;
   }
   .hero .names { margin: 0; font-family: var(--names); font-weight: 400; font-size: clamp(42px, 11.5vw, 56px); line-height: 1; }
@@ -130,6 +130,15 @@
   .hero .names .amp { font-size: .55em; line-height: 1.1; color: var(--copper); }
   .hero .date { font-family: var(--thin); font-weight: 300; font-size: clamp(44px, 12vw, 58px); line-height: 1; letter-spacing: .02em; margin-top: 10px; font-variant-numeric: lining-nums; }
   .hero .day { font-style: italic; font-size: 18px; color: #4A3B36; margin-top: 4px; }
+
+  .scroll-hint {                              /* подсказка для тех, кто не знает, что дальше есть ещё */
+    position: absolute; z-index: 3; left: 0; right: 0; bottom: 44px; text-align: center; pointer-events: none;
+    font-style: italic; font-size: 17px; line-height: 1.2; color: #4A3B36;
+    opacity: 0; transform: translateY(6px); transition: opacity .6s ease, transform .6s ease;
+  }
+  .scroll-hint.show { opacity: 1; transform: none; }
+  .scroll-hint svg { display: block; width: 20px; height: 20px; margin: 2px auto 0; animation: nudge 1.6s ease-in-out infinite; }
+  @keyframes nudge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
 
   /* ================= Бумага ================= */
   .paper {
@@ -156,7 +165,7 @@
   /* Кнопка музыки с бегущим текстом */
   .disc-wrap { position: relative; z-index: 5; height: 0; max-width: 520px; margin: 0 auto; }
   .disc {
-    position: absolute; left: 50%; top: -74px; transform: translateX(-50%);
+    position: absolute; left: 50%; top: -40px; transform: translateX(-50%);
     width: 104px; height: 104px; margin: 0; padding: 0;
     border: 0; background: none; cursor: pointer; display: grid; place-items: center; color: var(--ink);
     -webkit-tap-highlight-color: transparent;
@@ -316,6 +325,7 @@
       <div class="date">16/10</div>
       <div class="day">ҷумъа, 2026</div>
     </div>
+    <div class="scroll-hint" id="scroll-hint" aria-hidden="true">Ба поён варақ занед<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5"/></svg></div>
   </section>
 
   <div class="disc-wrap">
@@ -576,6 +586,10 @@
     mini.tabIndex = show ? 0 : -1;
   }).observe(disc);
 
+  /* ---------- Подсказка «листайте вниз»: прячется при первой прокрутке ---------- */
+  const hint = el('scroll-hint');
+  addEventListener('scroll', () => { if (scrollY > 40) hint.classList.remove('show'); }, { passive: true });
+
   /* ---------- Открытие конверта ---------- */
   const env = el('env');
   el('seal').addEventListener('click', () => {
@@ -589,6 +603,7 @@
       document.body.classList.remove('locked');
       window.scrollTo(0, 0);
       if (heroVisible) Snow.start();
+      setTimeout(() => { if (scrollY < 40) hint.classList.add('show'); }, reduce ? 0 : 1300);
     }, reduce ? 50 : 1900);
     setTimeout(() => env.remove(), reduce ? 200 : 3200);
   });
