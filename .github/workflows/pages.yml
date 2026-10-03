@@ -31,6 +31,8 @@ jobs:
       OG_SHA256: b627b5e2c75fbbddcdb56f18ed09f743c185aad01a36e583039c740965980067
       OG_UZ_URL: https://d2ol7oe51mr4n9.cloudfront.net/user_328NQyffrDU9OqI498OIYuAFPgq/0ef96cf1-1650-4b62-8524-a738789d01c9.jpg
       OG_UZ_SHA256: c110bf85e58643a5ce1e30c75820210d5b50900639ec908bd4260707f01ca790
+      OG_RU_URL: https://d2ol7oe51mr4n9.cloudfront.net/user_328NQyffrDU9OqI498OIYuAFPgq/e72d92ec-1973-4a24-b35f-1ec35ca6d430.jpg
+      OG_RU_SHA256: ba102dcc1b81da83c6b30b37822a9713ab6caa8266817a07c109d2aa6817e5d9
     steps:
       - uses: actions/checkout@v4
 
@@ -47,11 +49,13 @@ jobs:
           echo "$OG_SHA256  davatnoma/img/og-card.jpg" | sha256sum -c -
           curl -fsSL -o azimxoja-oydin/og-card.jpg "$OG_UZ_URL"
           echo "$OG_UZ_SHA256  azimxoja-oydin/og-card.jpg" | sha256sum -c -
+          curl -fsSL -o veronika/og-card.jpg "$OG_RU_URL"
+          echo "$OG_RU_SHA256  veronika/og-card.jpg" | sha256sum -c -
 
       - name: Assemble site
         run: |
           mkdir -p _site
-          cp -r index.html invite invite2 davatnoma azimxoja-oydin bordo shalfey _site/
+          cp -r index.html invite invite2 davatnoma azimxoja-oydin veronika bordo shalfey _site/
           touch _site/.nojekyll
 
       - uses: actions/configure-pages@v5
