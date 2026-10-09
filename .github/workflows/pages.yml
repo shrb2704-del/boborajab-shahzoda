@@ -35,6 +35,13 @@ jobs:
       OG_RU_SHA256: ba102dcc1b81da83c6b30b37822a9713ab6caa8266817a07c109d2aa6817e5d9
       OG_RUG_URL: https://d2ol7oe51mr4n9.cloudfront.net/user_328NQyffrDU9OqI498OIYuAFPgq/ae8b6f27-8536-4b92-bbac-8180a7c99131.jpg
       OG_RUG_SHA256: f0e5eb52335b32b6d12bd66ab4960dd31835bc15dd4f385033140bee75af2c64
+      # Чойгаштак: веточка, чайник (сгенерированы в Higgsfield) и открытка для превью
+      CHOY_SPRIG_URL: https://d2ol7oe51mr4n9.cloudfront.net/user_328NQyffrDU9OqI498OIYuAFPgq/9909c07d-56ff-4b64-9796-c4fb9f356b92.webp
+      CHOY_SPRIG_SHA256: 327c69560cf4ae24decf96ca6f5da79675d6b3b379095f3301e0530433f4f73a
+      CHOY_TEA_URL: https://d2ol7oe51mr4n9.cloudfront.net/user_328NQyffrDU9OqI498OIYuAFPgq/dfb38431-c3c3-4315-b8d1-6124268b989e.webp
+      CHOY_TEA_SHA256: 050bdc372117a42c9e607c19588c1e971148b39f34e25ad405f9987d1617667b
+      OG_CHOY_URL: https://d2ol7oe51mr4n9.cloudfront.net/user_328NQyffrDU9OqI498OIYuAFPgq/7efcfbe7-7576-435c-8db0-55abe51ca259.jpg
+      OG_CHOY_SHA256: 3c1277286be8cd16d1ab4cdb804482dc59242efcb1ef87518a7f28b86840abf3
     steps:
       - uses: actions/checkout@v4
 
@@ -55,11 +62,18 @@ jobs:
           echo "$OG_RU_SHA256  veronika/og-card.jpg" | sha256sum -c -
           curl -fsSL -o ru/og-card.jpg "$OG_RUG_URL"
           echo "$OG_RUG_SHA256  ru/og-card.jpg" | sha256sum -c -
+          mkdir -p choygashtak/img
+          curl -fsSL -o choygashtak/img/sprig.webp "$CHOY_SPRIG_URL"
+          echo "$CHOY_SPRIG_SHA256  choygashtak/img/sprig.webp" | sha256sum -c -
+          curl -fsSL -o choygashtak/img/tea.webp "$CHOY_TEA_URL"
+          echo "$CHOY_TEA_SHA256  choygashtak/img/tea.webp" | sha256sum -c -
+          curl -fsSL -o choygashtak/og-card.jpg "$OG_CHOY_URL"
+          echo "$OG_CHOY_SHA256  choygashtak/og-card.jpg" | sha256sum -c -
 
       - name: Assemble site
         run: |
           mkdir -p _site
-          cp -r index.html invite invite2 davatnoma azimxoja-oydin veronika ru bordo shalfey _site/
+          cp -r index.html invite invite2 davatnoma azimxoja-oydin veronika ru choygashtak bordo shalfey _site/
           touch _site/.nojekyll
 
       - uses: actions/configure-pages@v5
