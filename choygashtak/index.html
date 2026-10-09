@@ -366,7 +366,7 @@
 
   /* ---------- Музыка: громкость через Web Audio (на iPhone audio.volume не работает) ---------- */
   const Sound = (() => {
-    const audio = new Audio('../invite/music.mp3');
+    const audio = new Audio('music.mp3');
     audio.loop = true; audio.preload = 'none';
     let ctx = null, gain = null, on = false;
     const subs = [];
