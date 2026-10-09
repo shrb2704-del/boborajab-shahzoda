@@ -45,6 +45,9 @@ jobs:
       # временные фото для галереи Чойгаштака (g1–g6.webp), заменить на фото пары
       CHOY_GALLERY_URL: https://d2ol7oe51mr4n9.cloudfront.net/user_328NQyffrDU9OqI498OIYuAFPgq/ddd26b90-e2e8-45ed-b42d-c0f234613694.gz
       CHOY_GALLERY_SHA256: b63cedb9bc7989c6f20f65172218a3e464028212d4878bc59be4baa7fc391a2f
+      # букет гортензий и бледный эскиз здания для верха Чойгаштака
+      CHOY_DECO2_URL: https://d2ol7oe51mr4n9.cloudfront.net/user_328NQyffrDU9OqI498OIYuAFPgq/b00d7867-a432-4891-915f-dcff1fd30d37.gz
+      CHOY_DECO2_SHA256: 60d531d472b91c6444fdf28bb2365c068031353e136284ca2714fa949546ff1b
     steps:
       - uses: actions/checkout@v4
 
@@ -75,6 +78,9 @@ jobs:
           curl -fsSL -o gallery.tar.gz "$CHOY_GALLERY_URL"
           echo "$CHOY_GALLERY_SHA256  gallery.tar.gz" | sha256sum -c -
           tar xzf gallery.tar.gz -C choygashtak/img && rm gallery.tar.gz
+          curl -fsSL -o deco2.tar.gz "$CHOY_DECO2_URL"
+          echo "$CHOY_DECO2_SHA256  deco2.tar.gz" | sha256sum -c -
+          tar xzf deco2.tar.gz -C choygashtak/img && rm deco2.tar.gz
 
       - name: Assemble site
         run: |
