@@ -224,7 +224,7 @@
     position: absolute; left: 50%; top: 50%; width: 236px; height: 314px; margin: -157px 0 0 -118px; padding: 0; border: 0;
     border-radius: 16px; overflow: hidden; background: var(--cream); cursor: pointer;
     box-shadow: 0 22px 34px -18px rgba(0, 21, 49, .6);
-    transition: transform 1.1s cubic-bezier(.4, 0, .2, 1), opacity 1.1s cubic-bezier(.4, 0, .2, 1), box-shadow .6s ease;
+    transition: transform .6s cubic-bezier(.4, 0, .2, 1), opacity .6s cubic-bezier(.4, 0, .2, 1), box-shadow .4s ease;
     -webkit-box-reflect: below 6px linear-gradient(transparent 82%, rgba(255, 255, 255, .18));
   }
   .g-item img { width: 100%; height: 100%; object-fit: cover; transform-origin: 50% 40%; }
@@ -634,9 +634,9 @@
       dots.forEach((dt, i) => dt.classList.toggle('on', i === cur));
     };
     const go = i => { cur = (i + N) % N; render(); };
-    /* автопрокрутка: каждые 4 с, пока галерея на экране; после касания пауза 8 с, на время просмотра — стоп */
+    /* автопрокрутка: каждые 3 с, пока галерея на экране; после касания пауза 8 с, на время просмотра — стоп */
     let auto = null, idle = null, visible = false, viewing = false;
-    const startAuto = () => { if (reduce || auto !== null || !visible || viewing) return; auto = setInterval(() => go(cur + 1), 4000); };
+    const startAuto = () => { if (reduce || auto !== null || !visible || viewing) return; auto = setInterval(() => go(cur + 1), 3000); };
     const stopAuto = () => {
       clearInterval(auto); auto = null; clearTimeout(idle);
       idle = setTimeout(startAuto, 8000);
