@@ -618,8 +618,13 @@
       dots.forEach((dt, i) => dt.classList.toggle('on', i === cur));
     };
     const go = i => { cur = (i + N) % N; render(); };
-    let auto = null;
-    const stopAuto = () => { clearInterval(auto); auto = null; };
+    /* автопрокрутка: каждые 4 с, пока галерея на экране; после касания пауза 8 с, на время просмотра — стоп */
+    let auto = null, idle = null, visible = false, viewing = false;
+    const startAuto = () => { if (reduce || auto !== null || !visible || viewing) return; auto = setInterval(() => go(cur + 1), 4000); };
+    const stopAuto = () => {
+      clearInterval(auto); auto = null; clearTimeout(idle);
+      idle = setTimeout(startAuto, 8000);
+    };
     el('g-prev').addEventListener('click', () => { stopAuto(); go(cur - 1); });
     el('g-next').addEventListener('click', () => { stopAuto(); go(cur + 1); });
     items.forEach((it, i) => it.addEventListener('click', () => { stopAuto(); if (i === cur) open(i); else go(i); }));
@@ -635,19 +640,20 @@
     stage.addEventListener('click', e => { if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; } }, true);
     addEventListener('resize', render);
     render();
-    /* сама листается, пока галерея на экране и гость её не трогал */
-    if (!reduce && 'IntersectionObserver' in window) {
+    if ('IntersectionObserver' in window) {
       new IntersectionObserver(es => {
-        if (es[0].isIntersecting) { if (auto === null && !stage.dataset.touched) auto = setInterval(() => go(cur + 1), 4000); }
-        else stopAuto();
-      }, { threshold: .5 }).observe(stage);
-      stage.addEventListener('pointerdown', () => { stage.dataset.touched = '1'; stopAuto(); });
+        visible = es[0].isIntersecting;
+        if (visible) startAuto(); else { clearInterval(auto); auto = null; clearTimeout(idle); }
+      }, { threshold: .4 }).observe(stage);
     }
+    stage.addEventListener('pointerdown', stopAuto);
+    document.addEventListener('visibilitychange', () => { if (document.hidden) { clearInterval(auto); auto = null; } else startAuto(); });
     const figs = [...lbTrack.children];
     const lbGo = i => { i = (i + N) % N; lbTrack.scrollTo({ left: figs[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth' }); };
     lbTrack.addEventListener('scroll', () => requestAnimationFrame(() => { lbCount.textContent = `${nearest(lbTrack, figs) + 1} / ${N}`; }), { passive: true });
     let opener = null;
     const open = i => {
+      viewing = true; clearInterval(auto); auto = null; clearTimeout(idle);
       opener = document.activeElement; lb.hidden = false;
       requestAnimationFrame(() => { lb.classList.add('open'); lbTrack.scrollTo({ left: figs[i].offsetLeft }); lbCount.textContent = `${i + 1} / ${N}`; el('lb-close').focus(); });
       document.body.style.overflow = 'hidden';
@@ -657,6 +663,7 @@
       lb.classList.remove('open'); document.body.style.overflow = '';
       setTimeout(() => { lb.hidden = true; }, 300);
       if (opener) opener.focus({ preventScroll: true });
+      viewing = false; stopAuto();
     };
     el('lb-close').addEventListener('click', close);
     el('lb-prev').addEventListener('click', () => lbGo(nearest(lbTrack, figs) - 1));
