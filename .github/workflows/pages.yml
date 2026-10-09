@@ -42,6 +42,9 @@ jobs:
       CHOY_TEA_SHA256: 050bdc372117a42c9e607c19588c1e971148b39f34e25ad405f9987d1617667b
       OG_CHOY_URL: https://d2ol7oe51mr4n9.cloudfront.net/user_328NQyffrDU9OqI498OIYuAFPgq/7efcfbe7-7576-435c-8db0-55abe51ca259.jpg
       OG_CHOY_SHA256: 3c1277286be8cd16d1ab4cdb804482dc59242efcb1ef87518a7f28b86840abf3
+      # временные фото для галереи Чойгаштака (g1–g6.webp), заменить на фото пары
+      CHOY_GALLERY_URL: https://d2ol7oe51mr4n9.cloudfront.net/user_328NQyffrDU9OqI498OIYuAFPgq/ddd26b90-e2e8-45ed-b42d-c0f234613694.gz
+      CHOY_GALLERY_SHA256: b63cedb9bc7989c6f20f65172218a3e464028212d4878bc59be4baa7fc391a2f
     steps:
       - uses: actions/checkout@v4
 
@@ -69,6 +72,9 @@ jobs:
           echo "$CHOY_TEA_SHA256  choygashtak/img/tea.webp" | sha256sum -c -
           curl -fsSL -o choygashtak/og-card.jpg "$OG_CHOY_URL"
           echo "$OG_CHOY_SHA256  choygashtak/og-card.jpg" | sha256sum -c -
+          curl -fsSL -o gallery.tar.gz "$CHOY_GALLERY_URL"
+          echo "$CHOY_GALLERY_SHA256  gallery.tar.gz" | sha256sum -c -
+          tar xzf gallery.tar.gz -C choygashtak/img && rm gallery.tar.gz
 
       - name: Assemble site
         run: |

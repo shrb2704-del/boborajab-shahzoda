@@ -173,6 +173,38 @@
   .ghost-btn svg { width: 18px; height: 18px; }
   .ghost-btn:focus-visible, .solid-btn:focus-visible, .line-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 
+  /* фотогалерея: карусель с соседними кадрами и просмотр на весь экран */
+  .gallery { padding: 48px 0 40px; }
+  .gallery h2 { padding: 0 20px; }
+  .g-track {
+    display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 6px 15% 18px;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  .g-track::-webkit-scrollbar { display: none; }
+  .g-slide {
+    flex: 0 0 70%; scroll-snap-align: center; padding: 0; border: 0; background: none; cursor: zoom-in;
+    border-radius: 10px; overflow: hidden; box-shadow: 0 16px 30px -18px rgba(0, 21, 49, .6);
+    transform: scale(.88); opacity: .55; transition: transform .45s cubic-bezier(.2, .7, .2, 1), opacity .45s ease;
+  }
+  .g-slide.on { transform: none; opacity: 1; }
+  .g-slide img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
+  .g-slide:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+  .g-count { margin-top: 4px; font-size: 17px; letter-spacing: .12em; color: var(--ink-soft); font-variant-numeric: lining-nums tabular-nums; }
+  .lightbox {
+    position: fixed; inset: 0; z-index: 60; display: grid; grid-template-rows: auto 1fr auto; background: rgba(0, 10, 25, .97);
+    opacity: 0; visibility: hidden; transition: opacity .3s ease, visibility .3s;
+  }
+  .lightbox.open { opacity: 1; visibility: visible; }
+  .lb-top { display: flex; justify-content: space-between; align-items: center; padding: calc(10px + env(safe-area-inset-top, 0px)) 14px 6px; color: #fff; font-size: 17px; font-variant-numeric: lining-nums tabular-nums; }
+  .lb-btn { width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgba(255, 255, 255, .12); color: #fff; cursor: pointer; display: grid; place-items: center; }
+  .lb-btn svg { width: 20px; height: 20px; }
+  .lb-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .lb-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; min-height: 0; }
+  .lb-track::-webkit-scrollbar { display: none; }
+  .lb-track figure { flex: 0 0 100%; margin: 0; scroll-snap-align: center; display: grid; place-items: center; padding: 8px 12px; min-height: 0; }
+  .lb-track img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 6px; }
+  .lb-nav { display: flex; justify-content: center; gap: 18px; padding: 8px 0 calc(16px + env(safe-area-inset-bottom, 0px)); }
+
   /* место */
   .venue .name { font-family: var(--display); font-size: 30px; line-height: 1.2; margin: 0 0 6px; }
   .venue .addr { margin: 0 auto; max-width: 28ch; color: var(--ink-soft); }
@@ -281,6 +313,20 @@
     <p class="date-line">14 · 10 · 2026</p>
   </section>
 
+  <!-- Фотогалерея -->
+  <section class="gallery" aria-label="Фотогалерея">
+    <h2 class="reveal">Фотогалерея</h2>
+    <div class="g-track" id="g-track">
+      <button class="g-slide" type="button" data-i="0" aria-label="Открыть фото 1 из 6"><img src="img/g1.webp" width="900" height="1200" loading="lazy" decoding="async" alt=""></button>
+      <button class="g-slide" type="button" data-i="1" aria-label="Открыть фото 2 из 6"><img src="img/g2.webp" width="900" height="1200" loading="lazy" decoding="async" alt=""></button>
+      <button class="g-slide" type="button" data-i="2" aria-label="Открыть фото 3 из 6"><img src="img/g3.webp" width="900" height="1200" loading="lazy" decoding="async" alt=""></button>
+      <button class="g-slide" type="button" data-i="3" aria-label="Открыть фото 4 из 6"><img src="img/g4.webp" width="900" height="1200" loading="lazy" decoding="async" alt=""></button>
+      <button class="g-slide" type="button" data-i="4" aria-label="Открыть фото 5 из 6"><img src="img/g5.webp" width="900" height="1200" loading="lazy" decoding="async" alt=""></button>
+      <button class="g-slide" type="button" data-i="5" aria-label="Открыть фото 6 из 6"><img src="img/g6.webp" width="900" height="1200" loading="lazy" decoding="async" alt=""></button>
+    </div>
+    <div class="g-count" id="g-count" aria-live="polite">1 / 6</div>
+  </section>
+
   <!-- Приглашение -->
   <section>
     <div class="card reveal">
@@ -355,6 +401,12 @@
     <div class="script-names">Бобораджаб &amp; Шахзода</div>
   </section>
 </main>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Фото" hidden>
+  <div class="lb-top"><span id="lb-count">1 / 6</span><button class="lb-btn" id="lb-close" type="button" aria-label="Закрыть"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 5l10 10M15 5L5 15"/></svg></button></div>
+  <div class="lb-track" id="lb-track"><figure><img src="img/g1.webp" width="900" height="1200" loading="lazy" decoding="async" alt=""></figure><figure><img src="img/g2.webp" width="900" height="1200" loading="lazy" decoding="async" alt=""></figure><figure><img src="img/g3.webp" width="900" height="1200" loading="lazy" decoding="async" alt=""></figure><figure><img src="img/g4.webp" width="900" height="1200" loading="lazy" decoding="async" alt=""></figure><figure><img src="img/g5.webp" width="900" height="1200" loading="lazy" decoding="async" alt=""></figure><figure><img src="img/g6.webp" width="900" height="1200" loading="lazy" decoding="async" alt=""></figure></div>
+  <div class="lb-nav"><button class="lb-btn" id="lb-prev" type="button" aria-label="Предыдущее фото"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12.5 4.5L7 10l5.5 5.5"/></svg></button><button class="lb-btn" id="lb-next" type="button" aria-label="Следующее фото"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 4.5L13 10l-5.5 5.5"/></svg></button></div>
+</div>
 
 <div class="scroll-hint" id="scroll-hint" aria-hidden="true">Пролистайте вниз<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5"/></svg></div>
 <button class="music" id="music" type="button" aria-label="Выключить музыку">
@@ -471,6 +523,45 @@
     setTimeout(() => { if (scrollY < 40) hint.classList.add('show'); }, reduce ? 0 : 1400);
     setTimeout(() => { Snow.stop(); el('cover').remove(); }, 1200);
   });
+
+  /* ---------- Фотогалерея ---------- */
+  (() => {
+    const track = el('g-track'), slides = [...track.children], count = el('g-count'), N = slides.length;
+    const lb = el('lightbox'), lbTrack = el('lb-track'), lbCount = el('lb-count');
+    const nearest = (box, items) => {
+      const c = box.scrollLeft + box.clientWidth / 2; let best = 0, bd = Infinity;
+      items.forEach((it, i) => { const d = Math.abs(it.offsetLeft + it.offsetWidth / 2 - c); if (d < bd) { bd = d; best = i; } });
+      return best;
+    };
+    const mark = () => { const i = nearest(track, slides); slides.forEach((s, k) => s.classList.toggle('on', k === i)); count.textContent = `${i + 1} / ${N}`; };
+    track.addEventListener('scroll', () => requestAnimationFrame(mark), { passive: true });
+    addEventListener('resize', mark); mark();
+
+    const figs = [...lbTrack.children];
+    const go = i => { i = (i + N) % N; lbTrack.scrollTo({ left: figs[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth' }); };
+    lbTrack.addEventListener('scroll', () => requestAnimationFrame(() => { lbCount.textContent = `${nearest(lbTrack, figs) + 1} / ${N}`; }), { passive: true });
+    let opener = null;
+    const open = i => {
+      opener = document.activeElement; lb.hidden = false;
+      requestAnimationFrame(() => { lb.classList.add('open'); lbTrack.scrollTo({ left: figs[i].offsetLeft }); lbCount.textContent = `${i + 1} / ${N}`; el('lb-close').focus(); });
+      document.body.style.overflow = 'hidden';
+    };
+    const close = () => {
+      lb.classList.remove('open'); document.body.style.overflow = '';
+      setTimeout(() => { lb.hidden = true; }, 300);
+      if (opener) opener.focus({ preventScroll: true });
+    };
+    slides.forEach((s, i) => s.addEventListener('click', () => open(i)));
+    el('lb-close').addEventListener('click', close);
+    el('lb-prev').addEventListener('click', () => go(nearest(lbTrack, figs) - 1));
+    el('lb-next').addEventListener('click', () => go(nearest(lbTrack, figs) + 1));
+    addEventListener('keydown', e => {
+      if (lb.hidden) return;
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowLeft') go(nearest(lbTrack, figs) - 1);
+      else if (e.key === 'ArrowRight') go(nearest(lbTrack, figs) + 1);
+    });
+  })();
 
   /* ---------- Таймер ---------- */
   const target = new Date('2026-10-14T18:00:00+05:00').getTime();   // Душанбе, UTC+5
