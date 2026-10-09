@@ -137,9 +137,9 @@
   @keyframes floatB { from { transform: translateY(-3px) rotate(var(--r)); } to { transform: translateY(5px) rotate(calc(var(--r) + 2.5deg)); } }
   @keyframes swayL { from { transform: rotate(-8deg); } to { transform: rotate(-2deg) translateY(-4px); } }
   @keyframes swayR { from { transform: scaleX(-1) rotate(-6deg); } to { transform: scaleX(-1) rotate(0deg) translateY(-5px); } }
-  .env-hero .back, .env-hero .front { position: absolute; left: 13%; right: 13%; bottom: 6%; height: 40%; }
+  .env-hero .back, .env-hero .front { position: absolute; left: 13%; right: 13%; bottom: 6%; height: 34%; }
   .env-hero .back {                              /* задняя стенка с открытым клапаном — видна за фото */
-    background: linear-gradient(180deg, #001535, #000C22); height: 56%; bottom: 6%;
+    background: linear-gradient(180deg, #001535, #000C22); height: 50%; bottom: 6%;
     clip-path: polygon(0 18%, 100% 0, 100% 100%, 0 100%); border-radius: 3px;
   }
   .env-hero .front {
@@ -152,8 +152,9 @@
     background: linear-gradient(to top right, transparent 49.6%, rgba(255, 255, 255, .08) 50%, transparent 50.4%),
                 linear-gradient(to top left, transparent 49.6%, rgba(255, 255, 255, .08) 50%, transparent 50.4%);
   }
-  .env-hero .wax { position: absolute; left: 50%; bottom: calc(6% + 40% * .54 - 26px); width: 54px; transform: translateX(-50%); filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .35)); }
-  .env-hero .bq { position: absolute; width: 44%; pointer-events: none; }
+  .env-hero .wax { position: absolute; left: 50%; bottom: calc(6% + 34% * .54 - 26px); width: 54px; transform: translateX(-50%); filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .35)); }
+  .env-hero .bq { position: absolute; width: 44%; pointer-events: none; z-index: 4; }
+  .env-hero .back { z-index: 0; } .env-hero .photo { z-index: 1; } .env-hero .front { z-index: 2; } .env-hero .wax { z-index: 3; }
   .env-hero .bq.l { left: -12%; top: 26%; transform-origin: 70% 90%; animation: swayL 5.5s ease-in-out infinite alternate; }
   .env-hero .bq.r { right: -14%; bottom: -8%; transform-origin: 30% 90%; animation: swayR 6.5s ease-in-out -1.5s infinite alternate; }
   /* букет, заходящий на угол синей карточки */
