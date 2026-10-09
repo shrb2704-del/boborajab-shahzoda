@@ -48,6 +48,9 @@ jobs:
       # букет гортензий и бледный эскиз здания для верха Чойгаштака
       CHOY_DECO2_URL: https://d2ol7oe51mr4n9.cloudfront.net/user_328NQyffrDU9OqI498OIYuAFPgq/b00d7867-a432-4891-915f-dcff1fd30d37.gz
       CHOY_DECO2_SHA256: 60d531d472b91c6444fdf28bb2365c068031353e136284ca2714fa949546ff1b
+      # реалистичная веточка гортензий и золотая сургучная печать с сердцем
+      CHOY_DECO3_URL: https://d2ol7oe51mr4n9.cloudfront.net/user_328NQyffrDU9OqI498OIYuAFPgq/b72e9c8c-314b-4de2-aefe-a551266b69b6.gz
+      CHOY_DECO3_SHA256: 2af222dc847bc09d7ceea65842f8c2d2a0929dd29a59ce5161193c54a808ddfc
     steps:
       - uses: actions/checkout@v4
 
@@ -81,6 +84,9 @@ jobs:
           curl -fsSL -o deco2.tar.gz "$CHOY_DECO2_URL"
           echo "$CHOY_DECO2_SHA256  deco2.tar.gz" | sha256sum -c -
           tar xzf deco2.tar.gz -C choygashtak/img && rm deco2.tar.gz
+          curl -fsSL -o deco3.tar.gz "$CHOY_DECO3_URL"
+          echo "$CHOY_DECO3_SHA256  deco3.tar.gz" | sha256sum -c -
+          tar xzf deco3.tar.gz -C choygashtak/img && rm deco3.tar.gz
 
       - name: Assemble site
         run: |
