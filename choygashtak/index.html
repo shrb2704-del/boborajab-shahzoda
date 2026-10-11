@@ -723,18 +723,29 @@
   /* Ответы приходят в Telegram. Бот создаётся в @BotFather; CHAT_ID — ваш личный id
      (или id группы), куда бот будет писать. Пустые значения — отправка выключена. */
   const TG_TOKEN = '8255322250:AAHuTO3khZoaqrqMEAXooVhVoB3hU3BDRA8';
-  const TG_CHAT_ID = '5188194622';
+  const TG_CHAT_ID = '';                                   // id получателя Чойгаштака — добавить, когда он нажмёт Start у бота
+  /* Почта через FormSubmit: первое письмо на адрес — активация (нажать «Activate» один раз) */
+  const MAIL_TO = 'tadzhibaevashakhzoda9@gmail.com';
 
   const send = (name, yes, changed) => {
-    if (!TG_TOKEN || !TG_CHAT_ID) return Promise.resolve();
-    const text = [
-      changed ? '✏️ Гость изменил ответ (Чойгаштак)' : '🫖 Новый ответ на приглашение на Чойгаштак',
-      `Имя: ${name}`,
-      yes ? 'Ответ: ✅ придёт' : 'Ответ: ❌ не сможет прийти'
-    ].join('\n');
-    const body = new URLSearchParams({ chat_id: TG_CHAT_ID, text });
-    // no-cors: простой POST без preflight; сеть упала — fetch отклонится, и гость увидит ошибку
-    return fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, { method: 'POST', body, mode: 'no-cors', keepalive: true });
+    const title = changed ? '✏️ Гость изменил ответ (Чойгаштак)' : '🫖 Новый ответ на приглашение на Чойгаштак';
+    const answer = yes ? '✅ придёт' : '❌ не сможет прийти';
+    const jobs = [];
+    if (TG_TOKEN && TG_CHAT_ID) {
+      const body = new URLSearchParams({ chat_id: TG_CHAT_ID, text: [title, `Имя: ${name}`, `Ответ: ${answer}`].join('\n') });
+      // no-cors: простой POST без preflight; сеть упала — fetch отклонится, и гость увидит ошибку
+      jobs.push(fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, { method: 'POST', body, mode: 'no-cors', keepalive: true }));
+    }
+    if (MAIL_TO) {
+      const fd = new FormData();
+      fd.append('Гость', name); fd.append('Ответ', answer);
+      fd.append('_subject', `${title}: ${name} — ${answer}`);
+      fd.append('_template', 'table'); fd.append('_captcha', 'false');
+      jobs.push(fetch(`https://formsubmit.co/ajax/${MAIL_TO}`, { method: 'POST', body: fd, headers: { Accept: 'application/json' } }));
+    }
+    if (!jobs.length) return Promise.resolve();
+    // хватит одного дошедшего канала; ошибка — только если не ушло никуда
+    return Promise.allSettled(jobs).then(r => r.some(x => x.status === 'fulfilled') ? undefined : Promise.reject());
   };
 
   const form = el('rsvp-form'), nameIn = el('guest-name'), err = el('name-err');
