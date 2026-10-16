@@ -48,6 +48,9 @@ jobs:
       # реалистичная веточка гортензий и золотая сургучная печать с сердцем
       CHOY_DECO3_URL: https://d2ol7oe51mr4n9.cloudfront.net/user_328NQyffrDU9OqI498OIYuAFPgq/b72e9c8c-314b-4de2-aefe-a551266b69b6.gz
       CHOY_DECO3_SHA256: 2af222dc847bc09d7ceea65842f8c2d2a0929dd29a59ce5161193c54a808ddfc
+      # оши нахорӣ Фаррух и Сабрины: photos/p1-p4.webp и og-card.jpg
+      FS_ASSETS_URL: https://d2ol7oe51mr4n9.cloudfront.net/user_328NQyffrDU9OqI498OIYuAFPgq/0b36e01f-ac16-47d4-9ffe-bd503e9c03be.gz
+      FS_ASSETS_SHA256: 4f05293e5c1a23fe003edb9ecb3cad177840fcc03b140fbcc6e8bd436e3918d7
     steps:
       - uses: actions/checkout@v4
 
@@ -81,11 +84,14 @@ jobs:
           curl -fsSL -o deco3.tar.gz "$CHOY_DECO3_URL"
           echo "$CHOY_DECO3_SHA256  deco3.tar.gz" | sha256sum -c -
           tar xzf deco3.tar.gz -C choygashtak/img && rm deco3.tar.gz
+          curl -fsSL -o fs.tar.gz "$FS_ASSETS_URL"
+          echo "$FS_ASSETS_SHA256  fs.tar.gz" | sha256sum -c -
+          tar xzf fs.tar.gz -C farrux-sabrina && rm fs.tar.gz
 
       - name: Assemble site
         run: |
           mkdir -p _site
-          cp -r index.html invite invite2 davatnoma azimxoja-oydin veronika ru choygashtak bordo shalfey _site/
+          cp -r index.html invite invite2 davatnoma azimxoja-oydin veronika ru choygashtak farrux-sabrina bordo shalfey _site/
           touch _site/.nojekyll
 
       - uses: actions/configure-pages@v5
