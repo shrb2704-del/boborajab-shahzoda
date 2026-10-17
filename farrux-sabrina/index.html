@@ -215,7 +215,7 @@
   }
   .ghost-btn:hover { background: rgba(236, 228, 216, .1); }
   .ghost-btn svg { width: 18px; height: 18px; }
-  .ghost-btn:focus-visible, .solid-btn:focus-visible, .line-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+  .ghost-btn:focus-visible, .line-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 
   /* фотогалерея: карусель с соседними кадрами и просмотр на весь экран */
   .gallery { padding: 48px 0 40px; }
@@ -277,33 +277,6 @@
   .line-btn:hover { background: var(--navy); color: var(--cream); }
   .line-btn svg { width: 18px; height: 18px; }
   .venue .bq-venue { position: absolute; right: -40px; top: 10px; width: 120px; transform: scaleX(-1) rotate(-8deg); pointer-events: none; animation: drift 5.8s ease-in-out .5s infinite; }
-
-  /* анкета */
-  .rsvp .note { margin: -8px auto 22px; max-width: 30ch; color: var(--ink-soft); }
-  form { max-width: 340px; margin: 0 auto; text-align: left; }
-  .field { margin: 0 0 20px; padding: 0; border: 0; }
-  .field > label:not(.radio), .field > legend { display: block; font-size: 17px; font-weight: 600; letter-spacing: .04em; color: var(--ink-soft); padding: 0; margin-bottom: 6px; }
-  input[type=text] {
-    width: 100%; padding: 10px 2px; border: 0; border-bottom: 1px solid rgba(0, 34, 76, .45); border-radius: 0;
-    background: transparent; color: var(--navy); font: inherit; font-size: 20px;
-  }
-  input[type=text]::placeholder { color: #66718A; }
-  input[type=text]:focus { outline: none; border-bottom-color: var(--navy); box-shadow: 0 1px 0 var(--navy); }
-  input[aria-invalid=true] { border-bottom-color: #8E2F28; }
-  .radio { display: flex; align-items: center; gap: 12px; padding: 6px 0; font-size: 19px; cursor: pointer; }
-  .radio input { width: 20px; height: 20px; margin: 0; accent-color: var(--navy); }
-  .err { margin: 6px 0 0; font-size: 16px; color: #8E2F28; }
-  .solid-btn {
-    display: block; margin: 8px auto 0; padding: 14px 30px; border: 0; border-radius: 999px; cursor: pointer;
-    background: var(--navy); color: var(--cream); font: inherit; font-weight: 700; font-size: 17px; letter-spacing: .14em; text-transform: uppercase;
-    box-shadow: 0 12px 24px -12px rgba(0, 34, 76, .7); transition: background .2s ease, transform .2s ease;
-  }
-  .solid-btn:hover { background: #0A3264; }
-  .solid-btn:active { transform: scale(.97); }
-  .solid-btn:disabled { opacity: .7; cursor: progress; }
-  #send-err { text-align: center; }
-  .thanks .big { font-style: italic; font-weight: 600; font-size: 26px; line-height: 1.3; outline: none; }
-  .link-btn { margin-top: 10px; padding: 6px 4px; border: 0; background: none; font: inherit; font-size: 17px; color: var(--ink-soft); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
 
   /* финал */
   .final { padding-bottom: 72px; }
@@ -464,31 +437,6 @@
       <p class="addr">ш.&nbsp;Душанбе, хиёбони Саъдии Шерозӣ,&nbsp;16</p>
       <div class="map"><iframe title="Ресторани «Яккасарой» дар харита" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://yandex.ru/map-widget/v1/?text=%D0%94%D1%83%D1%88%D0%B0%D0%BD%D0%B1%D0%B5%2C%20%D1%80%D0%B5%D1%81%D1%82%D0%BE%D1%80%D0%B0%D0%BD%20%D0%AF%D0%BA%D0%BA%D0%B0%D1%81%D0%B0%D1%80%D0%BE%D0%B9%2C%20%D0%BF%D1%80%D0%BE%D1%81%D0%BF%D0%B5%D0%BA%D1%82%20%D0%A1%D0%B0%D0%B0%D0%B4%D0%B8%20%D0%A8%D0%B5%D1%80%D0%BE%D0%B7%D0%B8%2C%2016&amp;z=16"></iframe></div>
       <a class="line-btn" href="https://yandex.com/maps/?text=%D0%94%D1%83%D1%88%D0%B0%D0%BD%D0%B1%D0%B5%2C%20%D1%80%D0%B5%D1%81%D1%82%D0%BE%D1%80%D0%B0%D0%BD%20%D0%AF%D0%BA%D0%BA%D0%B0%D1%81%D0%B0%D1%80%D0%BE%D0%B9%2C%20%D0%BF%D1%80%D0%BE%D1%81%D0%BF%D0%B5%D0%BA%D1%82%20%D0%A1%D0%B0%D0%B0%D0%B4%D0%B8%20%D0%A8%D0%B5%D1%80%D0%BE%D0%B7%D0%B8%2C%2016" target="_blank" rel="noopener"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M10 17.5s5.5-5.1 5.5-9.3a5.5 5.5 0 0 0-11 0c0 4.2 5.5 9.3 5.5 9.3z"/><circle cx="10" cy="8.2" r="2"/></svg>Роҳро нишон додан</a>
-    </div>
-  </section>
-
-  <!-- Анкета -->
-  <section class="rsvp" id="rsvp">
-    <div class="gold-line short" style="margin-bottom: 28px"></div>
-    <h2>Иштироки худро тасдиқ кунед</h2>
-    <p class="note">Лутфан ба мо хабар диҳед, ки омада метавонед ё не.</p>
-    <form id="rsvp-form" novalidate>
-      <div class="field">
-        <label for="guest-name">Ном ва насаб</label>
-        <input type="text" id="guest-name" autocomplete="name" placeholder="Номи шумо" aria-describedby="name-err">
-        <p class="err" id="name-err" role="alert" hidden>Лутфан номатонро нависед, то донем, ки киро интизор шавем.</p>
-      </div>
-      <fieldset class="field">
-        <legend>Шумо меоед?</legend>
-        <label class="radio"><input type="radio" id="att-yes" name="attend" value="yes" checked>Бо камоли майл меоям</label>
-        <label class="radio"><input type="radio" id="att-no" name="attend" value="no">Афсӯс, омада наметавонам</label>
-      </fieldset>
-      <button class="solid-btn" type="submit" id="rsvp-send">Ҷавобро фиристодан</button>
-      <p class="err" id="send-err" role="alert" hidden>Ҷавоб фиристода нашуд. Интернетро санҷед ва бори дигар кӯшиш кунед.</p>
-    </form>
-    <div class="thanks" id="thanks" hidden>
-      <p class="big" id="thanks-text" tabindex="-1"></p>
-      <button class="link-btn" id="edit-answer" type="button">Ҷавобро иваз кардан</button>
     </div>
   </section>
 
@@ -735,55 +683,6 @@
     setTimeout(() => URL.revokeObjectURL(a.href), 4000);
   });
 
-  /* ---------- Анкета ---------- */
-  /* Ответы приходят в Telegram. Бот создаётся в @BotFather; CHAT_ID — ваш личный id
-     (или id группы), куда бот будет писать. Пустые значения — отправка выключена. */
-  const TG_TOKEN = '8255322250:AAHuTO3khZoaqrqMEAXooVhVoB3hU3BDRA8';
-  const TG_CHAT_ID = '5188194622';                         // ответы на оши нахорӣ Фаррух и Сабрины
-  const MAIL_TO = '';                                      // почта отключена — ответы только в Telegram
-
-  const send = (name, yes, changed) => {
-    const title = changed ? '✏️ Гость изменил ответ (оши нахорӣ, Фаррух и Сабрина)' : '🍚 Новый ответ: оши нахорӣ, Фаррух и Сабрина';
-    const answer = yes ? '✅ придёт' : '❌ не сможет прийти';
-    const jobs = [];
-    if (TG_TOKEN && TG_CHAT_ID) {
-      const body = new URLSearchParams({ chat_id: TG_CHAT_ID, text: [title, `Имя: ${name}`, `Ответ: ${answer}`].join('\n') });
-      // no-cors: простой POST без preflight; сеть упала — fetch отклонится, и гость увидит ошибку
-      jobs.push(fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, { method: 'POST', body, mode: 'no-cors', keepalive: true }));
-    }
-    if (MAIL_TO) {
-      const fd = new FormData();
-      fd.append('Гость', name); fd.append('Ответ', answer);
-      fd.append('_subject', `${title}: ${name} — ${answer}`);
-      fd.append('_template', 'table'); fd.append('_captcha', 'false');
-      jobs.push(fetch(`https://formsubmit.co/ajax/${MAIL_TO}`, { method: 'POST', body: fd, headers: { Accept: 'application/json' } }));
-    }
-    if (!jobs.length) return Promise.resolve();
-    // хватит одного дошедшего канала; ошибка — только если не ушло никуда
-    return Promise.allSettled(jobs).then(r => r.some(x => x.status === 'fulfilled') ? undefined : Promise.reject());
-  };
-
-  const form = el('rsvp-form'), nameIn = el('guest-name'), err = el('name-err');
-  const sendBtn = el('rsvp-send'), sendErr = el('send-err');
-  let answered = false;
-  nameIn.addEventListener('input', () => { if (nameIn.value.trim()) { err.hidden = true; nameIn.removeAttribute('aria-invalid'); } });
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    if (!nameIn.value.trim()) { err.hidden = false; nameIn.setAttribute('aria-invalid', 'true'); nameIn.focus(); return; }
-    const first = nameIn.value.trim().split(/\s+/)[0];
-    const no = form.querySelector('input[name="attend"]:checked').value === 'no';
-    sendBtn.disabled = true; sendErr.hidden = true;
-    send(nameIn.value.trim(), !no, answered).then(() => {
-      sendBtn.disabled = false; answered = true;
-      form.hidden = true; el('thanks').hidden = false;
-      const t = el('thanks-text');
-      t.textContent = no ? `Афсӯс, ${first}! Ҷои шумо холӣ хоҳад буд.` : `Ташаккур, ${first}! Мунтазири шумо ҳастем`;
-      t.focus({ preventScroll: true });
-    }, () => {
-      sendBtn.disabled = false; sendErr.hidden = false;
-    });
-  });
-  el('edit-answer').addEventListener('click', () => { el('thanks').hidden = true; form.hidden = false; nameIn.focus(); });
 })();
 </script>
 </body>
